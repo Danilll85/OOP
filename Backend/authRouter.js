@@ -1,6 +1,8 @@
 import Router from "express";
-import controller from "./authController";
+import controller from "./authController.js";
 import { check } from "express-validator";
+//import authMiddleware from "./middlewaree/authMiddleware.js";
+//import roleMiddleware from "./middlewaree/roleMiddleware.js";
 
 const router = new Router();
 
@@ -16,6 +18,8 @@ router.post(
     controller.registration
 );
 router.post("/login", controller.login);
-router.post("/users", controller.getUsers);
+router.get("/users", controller.getUsers);
+//roleMiddleware(["USER"])
+//module.exports = router;
 
-module.exports = router;
+export default router;
