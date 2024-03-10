@@ -5,7 +5,6 @@ import authRouter from "./authRouter.js";
 
 const PORT = 3000;
 const __dirname = path.resolve();
-const frontendPath = path.join(__dirname, "../", "Frontend");
 
 const db = "mongodb://127.0.0.1:27017/Authentification";
 
@@ -17,25 +16,28 @@ app.use(express.json());
 app.use("/auth", authRouter);
 
 //подключаем фронт
-app.set("views", frontendPath);
+app.set("views", path.join(__dirname, "../", "/Frontend", "/views"));
 app.set("view engine", "ejs");
 
 //Home
-app.use(express.static(frontendPath));
+app.use(express.static(path.join(__dirname, "../", "/Frontend", "/public")));
 
 //Authentificaton
-
 app.get("/", (req, res) => {
     res.render("home");
 });
 
 //Test
-app.get("Authentification/Registration", (req, res) => {
+app.get("/Reg", (req, res) => {
     res.render("Reg");
 });
 
-app.get("Authentification/LogIn", (req, res) => {
+app.get("/LogIn", (req, res) => {
     res.render("LogIn");
+});
+
+app.get("/Katalog", (req, res) => {
+    res.render("Katalog");
 });
 //
 
