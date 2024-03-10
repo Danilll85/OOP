@@ -1,7 +1,7 @@
 import User from "./models/User.js";
 import Role from "./models/Role.js";
 import bcrypt from "bcryptjs";
-import validationResult from "express-validator";
+import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import secret from "./config.js";
 
@@ -17,7 +17,7 @@ export class authController {
     async registration(req, res) {
         try {
             const errors = validationResult(req);
-
+            console.log(errors);
             if (!errors.isEmpty()) {
                 return res
                     .status(400)
@@ -34,18 +34,16 @@ export class authController {
             }
 
             const hashPassword = bcrypt.hashSync(password, 7);
+            let userRole = await Role.findOne({ value: "USER" });
 
-            if (user.isEmpty()) {
-                // проверка на тип пользователя
-                const userRole = await Role.findOne({ value: "SELLER" });
-            } else {
-                const userRole = await Role.findOne({ value: "USER" });
+            if (userRole === null) {
+                userRole = "USER";
             }
 
             const user = new User({
                 username,
                 password: hashPassword,
-                roles: [userRole.value],
+                roles: userRole,
             });
 
             await user.save();

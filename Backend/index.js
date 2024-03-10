@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import mongoose from "mongoose";
 import authRouter from "./authRouter.js";
+import bodyParser from "body-parser";
 
 const PORT = 3000;
 const __dirname = path.resolve();
@@ -12,7 +13,7 @@ const app = express();
 
 // Для парсинга json из запросов
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/auth", authRouter);
 
 //подключаем фронт
@@ -22,12 +23,11 @@ app.set("view engine", "ejs");
 //Home
 app.use(express.static(path.join(__dirname, "../", "/Frontend", "/public")));
 
-//Authentificaton
 app.get("/", (req, res) => {
     res.render("home");
 });
 
-//Test
+//Authentificaton
 app.get("/Reg", (req, res) => {
     res.render("Reg");
 });
@@ -39,7 +39,6 @@ app.get("/LogIn", (req, res) => {
 app.get("/Katalog", (req, res) => {
     res.render("Katalog");
 });
-//
 
 const start = async () => {
     try {

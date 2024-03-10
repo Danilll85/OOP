@@ -7,7 +7,7 @@ import { check } from "express-validator";
 const router = new Router();
 
 router.post(
-    "/registration",
+    "/Reg",
     [
         check("username", "Имя пользователя не может быть пустым").notEmpty(),
         check(
@@ -18,8 +18,9 @@ router.post(
     controller.registration
 );
 
-router.post("/login", controller.login);
+router.post("/LogIn", controller.login);
 router.get("/users", controller.getUsers);
+//router.get("/users", authMiddleware(["USER"]), controller.getUsers);
 //roleMiddleware(["USER"])
 //module.exports = router;
 

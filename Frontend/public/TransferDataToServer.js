@@ -1,38 +1,52 @@
-// Получение значений логина и пароля из формы
-const email = document.querySelector('input[name="auth_email"]').value;
-const password = document.querySelector('input[name="auth_pass"]').value;
+document.addEventListener("DOMContentLoaded", () => {
+    const registrationForm = document.getElementById("registrationForm");
 
-// Создание объекта с данными для отправки на сервер
-const data = {
-    email: email,
-    password: password,
-};
+    registrationForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
 
-// Опции для fetch()
-const options = {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-};
+        // Получение значений email и пароля из формы
+        const emailInput = document.getElementById("auth_email");
+        const email = emailInput.value;
 
-// URL, на который будет отправлен запрос
-const url = "/auth/registration";
+        const passwordInput = document.getElementById("auth_pass");
+        const password = passwordInput.value;
 
-// Отправка запроса на сервер
-fetch(url, options)
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then((data) => {
-        // Обработка ответа от сервера
-        console.log(data);
-    })
-    .catch((error) => {
-        // Обработка ошибок
-        console.error("There was a problem with the fetch operation:", error);
+        // Создание объекта с данными для отправки на сервер
+        const data = {
+            username: email,
+            password: password,
+        };
+
+        // Опции для fetch()
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        };
+
+        // URL, на который будет отправлен запрос
+        const url = "/auth/Reg";
+
+        // Отправка запроса на сервер
+        fetch(url, options)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Обработка ответа от сервера
+                console.log(data);
+            })
+            .catch((error) => {
+                // Обработка ошибок
+                console.error(
+                    "There was a problem with the fetch operation:",
+                    error
+                );
+            });
     });
+});
