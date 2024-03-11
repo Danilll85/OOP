@@ -45,6 +45,26 @@ app.get("/LogIn", (req, res) => {
     res.render("LogIn");
 });
 
+app.get("/SellerSwitch", (req, res) => {
+    res.render("SellerSwitch");
+});
+
+app.get("/SellerReg", (req, res) => {
+    res.render("SellerReg");
+});
+
+app.get("/SellerLogIn", (req, res) => {
+    res.render("SellerLogIn");
+});
+
+app.get("/SellerRegStatus", (req, res) => {
+    res.render("SellerRegStatus");
+});
+
+app.get("/SellerLogInStatus", (req, res) => {
+    res.render("SellerLogInStatus");
+});
+
 app.get("/Katalog", (req, res) => {
     res.render("Katalog");
 });

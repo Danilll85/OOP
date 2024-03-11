@@ -19,6 +19,20 @@ router.post(
 );
 
 router.post("/LogIn", controller.login);
+
+router.post(
+    "/SellerReg",
+    [
+        check("username", "Имя пользователя не может быть пустым").notEmpty(),
+        check(
+            "password",
+            "Пароль должен быть длинее 4 и меньше 10 символов"
+        ).isLength({ min: 4, max: 10 }),
+    ],
+    controller.sellerRegistration
+);
+
+router.post("/SellerLogIn", controller.sellerLogin);
 router.get("/users", controller.getUsers);
 //router.get("/users", authMiddleware(["USER"]), controller.getUsers);
 //roleMiddleware(["USER"])

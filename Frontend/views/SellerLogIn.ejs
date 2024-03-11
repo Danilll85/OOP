@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Reg.css">
+    <title>Seller Log In</title>
+</head>
+
+<body>
+    <div class="form_auth_block">
+        <div class="form_auth_block_content">
+            <p class="form_auth_block_head_text">Авторизация</p>
+            <form class="form_auth_style" action="/auth/SellerLogIn" method="post">
+                <label>Введите Ваш имейл</label>
+                <input type="email" name="username" placeholder="Введите Ваш имейл" required>
+                <label>Введите Ваш пароль</label>
+                <input type="password" name="password" placeholder=" Введите пароль" required>
+                <button class="form_auth_button" type="submit" name="form_auth_submit">Войти</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="SellerTokenHandler.js"></script>
+
+</html>
+
+<!-- Возвращаем просто роль в session storage и всё просто мега чилл, там можно будет добавить поля для добавления товара и тд
+типо как у юзера корзина, то там можно сделать SellerTools и добавлять там
+-->
