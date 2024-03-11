@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+    backend:
+        build:
+            context: ./Backend
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./Backend:/app # Монтируем локальную папку Backend внутрь контейнера
+        depends_on:
+            - mongo
+    frontend:
+        build:
+            context: ./Frontend
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - ./Frontend/public:/usr/share/nginx/html # Монтируем локальную папку public внутрь контейнера
+    mongo:
+        image: mongo:latest
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=user
+            - MONGO_INITDB_ROOT_PASSWORD=pass
+        ports:
+            - "27017:27017" # Пробрасываем порт 27017 из контейнера на хост

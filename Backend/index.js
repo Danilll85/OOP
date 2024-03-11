@@ -8,6 +8,7 @@ const PORT = 3000;
 const __dirname = path.resolve();
 
 const db = "mongodb://127.0.0.1:27017/Authentification";
+//const db = "mongodb://mongodb:27017/Authentification";
 
 const app = express();
 
@@ -25,6 +26,14 @@ app.use(express.static(path.join(__dirname, "../", "/Frontend", "/public")));
 
 app.get("/", (req, res) => {
     res.render("home");
+});
+
+app.get("/RegStatus", (req, res) => {
+    res.render("RegStatus");
+});
+
+app.get("/LogInStatus", (req, res) => {
+    res.render("LogInStatus");
 });
 
 //Authentificaton
