@@ -1,6 +1,9 @@
 .container {
-    margin: 50%;
     display: flex;
     justify-content: space-between;
+    border: 1px solid red;
+}
+
+.tools {
     border: 1px solid red;
 }

@@ -22,9 +22,13 @@ loginForm.addEventListener("submit", async (event) => {
         const { token } = data;
         console.log("Полученный токен:", token);
 
+        const sellerObj = {
+            role: "SELLER",
+        };
+
         // Сохраняем токен в localStorage
-        localStorage.setItem("token", token);
         sessionStorage.setItem("token", token);
+        sessionStorage.setItem("role", JSON.stringify(sellerObj));
         // Перенаправляем пользователя на другую страницу или выполняем другие действия
         // Например, переход на страницу домашнего кабинета
         window.location.href = "/LogInStatus";

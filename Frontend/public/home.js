@@ -37,5 +37,8 @@ const lout = document.getElementById("log_out_button");
 
 lout.addEventListener("click", () => {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role");
     window.location.reload();
 });
+
+// --------------------------------------------------------------------------------------------
