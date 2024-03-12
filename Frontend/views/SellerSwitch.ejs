@@ -19,20 +19,29 @@
     </div>
 
     <div class="tools">
-        <div class="add_description">
-
-        </div>
-
-        <div class="add_photo">
-
-        </div>
-
-        <div class="add_price">
-
-        </div>
+        <form class="addProductForm" action="/auth/AdminModeration" method="post">
+            <div class="add_title">
+                <label for="productTitle">Название товара:</label>
+                <input type="text" id="productTitle" name="productTitle" required>
+            </div>
+            <div class="add_description">
+                <label for="productDescription">Описание товара:</label>
+                <textarea id="productDescription" name="productDescription" required></textarea>
+            </div>
+            <div class="add_photo">
+                <label for="productPhoto">Фото товара:</label>
+                <input type="file" id="productPhoto" name="productPhoto" accept="image/*" required>
+            </div>
+            <div class="add_price">
+                <label for="productPrice">Цена товара:</label>
+                <input type="number" id="productPrice" name="productPrice" required>
+            </div>
+            <button type="submit">Добавить товар</button>
+        </form>
     </div>
-</body>
 
-<script src="SellerTools.js"></script>
+    <div id="message"></div>
+
+    <script src="SellerTools.js"></script>
 
 </html>

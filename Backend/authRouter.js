@@ -1,5 +1,6 @@
 import Router from "express";
 import controller from "./authController.js";
+import admin from "./models/Admin.js";
 import { check } from "express-validator";
 //import authMiddleware from "./middlewaree/authMiddleware.js";
 //import roleMiddleware from "./middlewaree/roleMiddleware.js";
@@ -37,5 +38,22 @@ router.get("/users", controller.getUsers);
 //router.get("/users", authMiddleware(["USER"]), controller.getUsers);
 //roleMiddleware(["USER"])
 //module.exports = router;
+
+router.post(
+    "/AdminModeration",
+    [
+        check(
+            "productTitle",
+            "Название товара не должно быть пустым"
+        ).notEmpty(),
+        check(
+            "productDescription",
+            "Описание товара не должно быть пустым"
+        ).notEmpty(),
+        check("productPrice", "Добавьте фото товара").notEmpty(),
+        check("productPrice", "Цена товара не должно быть пустой").notEmpty(),
+    ],
+    admin.addProduct
+);
 
 export default router;
