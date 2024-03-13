@@ -63,4 +63,6 @@ router.post(
     cart.showUserName
 );
 
+router.post("/AddToCart", cart.addProduct);
+
 export default router;

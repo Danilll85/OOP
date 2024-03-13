@@ -4,12 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ShopingCart.css">
     <title>Shoping Cart</title>
 </head>
 
 <body>
     <h1 id="username"></h1>
+    <div class="bodyOfCart">
+        <% products.forEach(product=> { %>
+            <div class="product-container">
+                <div class="product-details">
+                    <h2>
+                        <%= product.productTitle %>
+                    </h2>
+                    <p>Цена: <%= product.productPrice %>
+                    </p>
+                    <p>Кол-во: товара: <%= product.productCounts %>
+                    </p>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+    <div class="Payment">
+        <p>Итого: <%= price %> рублей
+        </p>
 
+        <button>Оплатить</button>
+    </div>
 </body>
 
 <script src="ShopingCart.js"></script>

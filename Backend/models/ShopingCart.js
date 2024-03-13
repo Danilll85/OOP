@@ -1,6 +1,7 @@
-import product from "./Product.js";
+//import product from "./Product.js";
 import jwt from "jsonwebtoken";
 import secret from "../config.js";
+import { Product } from "./Product.js";
 
 export class ShopingCart {
     listOfProducts = new Array();
@@ -10,9 +11,25 @@ export class ShopingCart {
         return this.listOfProducts;
     }
 
-    addProduct(product) {
-        this.totalprice += product.getProductPrice;
-        this.listOfProducts.push(product);
+    addProduct = (req, res) => {
+        try {
+            const { productName, productPrice, productCount } = req.body;
+            const product = new Product(
+                productName,
+                productPrice,
+                productCount
+            );
+            this.totalprice += product.getProductPrice;
+            this.listOfProducts.push(product);
+        } catch (err) {
+            console.log(
+                `Ошибка в addProduct класса ShopingCart ${this.addProduct}`
+            );
+        }
+    };
+
+    makeOrder() {
+        //додумать логику
     }
 
     showUserName(req, res) {
@@ -26,8 +43,18 @@ export class ShopingCart {
             // Отправляем имя пользователя обратно на клиент
             res.json({ username: decodedData.username });
         } catch (err) {
-            console.log(`Ошибка на сервере (корзиина) ${err}`);
+            console.log(`Ошибка на сервере (корзина) ${err}`);
         }
+    }
+
+    getTotalCount() {
+        let total = 0;
+
+        this.listOfProducts.forEach((element) => {
+            total += element.productPrice;
+        });
+
+        return total;
     }
 }
 

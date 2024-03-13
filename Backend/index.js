@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import authRouter from "./authRouter.js";
 import bodyParser from "body-parser";
 import dataBase from "./DataBase.js";
+import cart from "./models/ShopingCart.js";
 
 const PORT = 3000;
 const __dirname = path.resolve();
@@ -83,11 +84,20 @@ app.get("/CarsKatalog", async (req, res) => {
 
 //Cart
 app.get("/ShopingCart", (req, res) => {
-    res.render("ShopingCart");
+    let temp = new Array();
+
+    temp = cart.getlistOfProducts();
+
+    temp.forEach((element) => {
+        console.log(temp);
+    });
+    res.render("ShopingCart", {
+        products: cart.getlistOfProducts(),
+        price: cart.getTotalCount(),
+    });
 });
 
 //Orders History
-
 app.get("/OrdersHistory", (req, res) => {
     res.render("OrdersHistory");
 });

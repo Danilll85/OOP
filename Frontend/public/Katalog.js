@@ -1,21 +1,61 @@
 const elements = document.getElementsByClassName("buy_button");
-
 const buyButtons = Array.from(elements);
 
 buyButtons.forEach((button) => {
     const addButton = button.querySelector("#Add_button"); // Находим кнопку "Добавить в корзину" в текущем блоке
 
     addButton.addEventListener("click", () => {
-        // Ваша логика обработки нажатия на кнопку "Добавить в корзину"
         const productCountInput = button.querySelector(
             'input[name="productCount"]'
         );
-        const productCount = productCountInput.value;
-        const productTitle = productCountInput.id.replace("productCount", ""); // Получаем заголовок товара из ID
+        const productName = button.parentElement.querySelector(
+            ".product-details h2"
+        ).innerText;
+        const productPrice = button.parentElement
+            .querySelector(".product-details p:nth-child(3)")
+            .innerText.split(": ")[1];
 
-        // Здесь можно выполнить действия с полученными данными
-        console.log(
-            `Добавляем товар "${productTitle}" в корзину в количестве ${productCount}`
-        );
+        const productCount = productCountInput.value;
+
+        // Отправляем данные на сервер
+        const data = {
+            productName: productName,
+            productPrice: productPrice,
+            productCount: productCount,
+        };
+
+        const token = sessionStorage.getItem("token");
+
+        // Отправляем запрос POST на сервер с данными о товаре
+        fetch("/auth/AddToCart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            token: token,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Ошибка при добавлении товара в корзину");
+                }
+                return response.json();
+            })
+            .then((result) => {
+                // Обработка успешного ответа от сервера
+                console.log(result);
+            })
+            .catch((error) => {
+                // Обработка ошибок
+                console.error("Ошибка:", error);
+            });
     });
+});
+
+// -------------------------------------------
+
+const cart = document.getElementById("KorzinaForItems");
+
+cart.addEventListener("click", () => {
+    window.location.href = "/ShopingCart";
 });

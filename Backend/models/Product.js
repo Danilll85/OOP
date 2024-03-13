@@ -1,11 +1,10 @@
 import { Schema, model } from "mongoose";
 
 export class Product {
-    constructor(productTitle, productDescription, productPhoto, productPrice) {
+    constructor(productTitle, productPrice, productCounts) {
         this.productTitle = productTitle;
-        this.productDescription = productDescription;
-        this.productPhoto = productPhoto;
         this.productPrice = productPrice;
+        this.productCounts = productCounts;
     }
 
     getProductPrice() {
