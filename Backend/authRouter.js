@@ -1,6 +1,7 @@
 import Router from "express";
 import controller from "./authController.js";
 import admin from "./models/Admin.js";
+import cart from "./models/ShopingCart.js";
 import { check } from "express-validator";
 //import authMiddleware from "./middlewaree/authMiddleware.js";
 //import roleMiddleware from "./middlewaree/roleMiddleware.js";
@@ -54,6 +55,12 @@ router.post(
         check("productPrice", "Цена товара не должно быть пустой").notEmpty(),
     ],
     admin.addProduct
+);
+
+router.post(
+    "/ShopingCart",
+    check("token", "нет токена").notEmpty(),
+    cart.showUserName
 );
 
 export default router;

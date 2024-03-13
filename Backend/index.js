@@ -3,6 +3,7 @@ import path from "path";
 import mongoose from "mongoose";
 import authRouter from "./authRouter.js";
 import bodyParser from "body-parser";
+import dataBase from "./DataBase.js";
 
 const PORT = 3000;
 const __dirname = path.resolve();
@@ -65,8 +66,30 @@ app.get("/SellerLogInStatus", (req, res) => {
     res.render("SellerLogInStatus");
 });
 
+// Products
 app.get("/Katalog", (req, res) => {
     res.render("Katalog");
+});
+
+app.get("/CarsKatalog", async (req, res) => {
+    try {
+        const products = await dataBase.findAllItemsByTheirType("Car", db);
+        res.render("CarsKatalog", { products: products });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+//Cart
+app.get("/ShopingCart", (req, res) => {
+    res.render("ShopingCart");
+});
+
+//Orders History
+
+app.get("/OrdersHistory", (req, res) => {
+    res.render("OrdersHistory");
 });
 
 const start = async () => {

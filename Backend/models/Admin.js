@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import Seller from "./Seller.js";
 import Product from "./Product.js";
+import fs from "fs";
 import { validationResult } from "express-validator";
 
 export class Admin extends Seller {
@@ -15,6 +16,7 @@ export class Admin extends Seller {
             }
 
             const {
+                typeOfProduct,
                 productTitle,
                 productDescription,
                 productPhoto,
@@ -36,6 +38,7 @@ export class Admin extends Seller {
             }
 
             const product = new Product({
+                productType: typeOfProduct,
                 productTitle: productTitle,
                 productDescription: productDescription,
                 productPhoto: productPhoto,

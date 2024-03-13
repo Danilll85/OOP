@@ -1,14 +1,15 @@
 import User from "./models/User.js";
 import Seller from "./models/Seller.js";
-//import Role from "./models/Role.js";
 import bcrypt from "bcryptjs";
+import roles from "./models/Role.js";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import secret from "./config.js";
 
-const generateAccesToken = (id, roles) => {
+const generateAccesToken = (id, username, roles) => {
     const payload = {
         id,
+        username,
         roles,
     };
     return jwt.sign(payload, secret, { expiresIn: "24h" });
@@ -65,7 +66,11 @@ export class authController {
             if (!validPassword) {
                 res.status(400).json({ message: "Введён не верный пароль" });
             }
-            const token = generateAccesToken(user._id, user.roles);
+            const token = generateAccesToken(
+                user._id,
+                user.username,
+                user.roles
+            );
             return res.json({ token });
         } catch (err) {
             console.log(err);
@@ -123,7 +128,11 @@ export class authController {
             if (!validPassword) {
                 res.status(400).json({ message: "Введён не верный пароль" });
             }
-            const token = generateAccesToken(seller._id, seller.roles);
+            const token = generateAccesToken(
+                seller._id,
+                seller.username,
+                seller.roles
+            );
             return res.json({ token });
         } catch (err) {
             console.log(err);

@@ -7,10 +7,15 @@ export class Product {
         this.productPhoto = productPhoto;
         this.productPrice = productPrice;
     }
+
+    getProductPrice() {
+        return this.productPrice;
+    }
 }
 
 // Определяем схему для модели Product
 const productSchema = new Schema({
+    productType: { type: String, required: true },
     productTitle: { type: String, unique: true, required: true },
     productDescription: { type: String, required: true },
     productPhoto: { type: Buffer, required: true },

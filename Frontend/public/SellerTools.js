@@ -11,6 +11,7 @@ element.addEventListener("submit", async (event) => {
         const productDescription = formData.get("productDescription");
         const productPrice = formData.get("productPrice");
         const productPhoto = formData.get("productPhoto").files[0]; // Используем свойство files, а не file
+        const typeOfProduct = formData.get("typeOfProduct");
 
         try {
             const requestData = new FormData(); // Создаем новый объект FormData
@@ -18,6 +19,7 @@ element.addEventListener("submit", async (event) => {
             requestData.append("productDescription", productDescription);
             requestData.append("productPrice", productPrice);
             requestData.append("productPhoto", productPhoto);
+            requestData.append("typeOfProduct", typeOfProduct);
 
             const response = await fetch("/auth/AdminModeration", {
                 method: "POST",

@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 
 // Определяем класс User
 export class User {
+    loyalityPoints = 0;
+
     constructor(username, password) {
         this.username = username;
         this.password = password;

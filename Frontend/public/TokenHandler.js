@@ -23,7 +23,6 @@ loginForm.addEventListener("submit", async (event) => {
         console.log("Полученный токен:", token);
 
         // Сохраняем токен в localStorage
-        localStorage.setItem("token", token);
         sessionStorage.setItem("token", token);
         // Перенаправляем пользователя на другую страницу или выполняем другие действия
         // Например, переход на страницу домашнего кабинета

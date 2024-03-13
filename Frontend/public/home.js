@@ -42,3 +42,11 @@ lout.addEventListener("click", () => {
 });
 
 // --------------------------------------------------------------------------------------------
+
+//Для корзины
+
+const cart = document.getElementById("KorzinaForItems");
+
+cart.addEventListener("click", () => {
+    window.location.href = "/ShopingCart";
+});

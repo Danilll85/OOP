@@ -20,6 +20,14 @@
 
     <div class="tools">
         <form class="addProductForm" action="/auth/AdminModeration" method="post">
+            <div class="add_type">
+                <label for="typeOfProduct">Тип товара:</label>
+                <select name="typeOfProduct">
+                    <option value="Car">Car</option>
+                    <option value="Alcohol">Alcohol</option>
+                    <option value="Smoking">Smoking</option>
+                </select>
+            </div>
             <div class="add_title">
                 <label for="productTitle">Название товара:</label>
                 <input type="text" id="productTitle" name="productTitle" required>

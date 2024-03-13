@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CarKatalog.css">
+    <title>Cars</title>
+</head>
+
+<body>
+    <% products.forEach(product=> { %>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="data:image/jpg;base64, <%= product.productPhoto.toString('base64') %>"
+                    alt="<%= product.productTitle %>">
+            </div>
+            <div class="product-details">
+                <h2>
+                    <%= product.productTitle %>
+                </h2>
+                <p>
+                    <%= product.productDescription %>
+                </p>
+                <p>Цена: <%= product.productPrice %> рублей</p>
+                <p>Тип товара: <%= product.productType %>
+                </p>
+            </div>
+            <div class="buy_button">
+                <button type="button" id="Add_button">Добавить в корзину</button>
+
+                <label for="productCount">Кол-во товара:</label>
+                <input type="number" id="productCount<%=product.productTitle%>" name="productCount" required>
+            </div>
+        </div>
+        <% }); %>
+</body>
+
+<script src="Katalog.js"></script>
+
+</html>
