@@ -91,6 +91,8 @@ app.get("/ShopingCart", (req, res) => {
     temp.forEach((element) => {
         console.log(temp);
     });
+
+    console.log(`total = ${cart.getTotalCount()}`);
     res.render("ShopingCart", {
         products: cart.getlistOfProducts(),
         price: cart.getTotalCount(),

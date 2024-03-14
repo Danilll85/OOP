@@ -14,12 +14,14 @@ export class ShopingCart {
     addProduct = (req, res) => {
         try {
             const { productName, productPrice, productCount } = req.body;
-            const product = new Product(
-                productName,
-                productPrice,
-                productCount
-            );
+
+            let convPrice = parseInt(productPrice);
+            let convCount = parseInt(productCount);
+
+            const product = new Product(productName, convPrice, convCount);
+
             this.totalprice += product.getProductPrice;
+
             this.listOfProducts.push(product);
         } catch (err) {
             console.log(
@@ -51,7 +53,13 @@ export class ShopingCart {
         let total = 0;
 
         this.listOfProducts.forEach((element) => {
-            total += element.productPrice;
+            total +=
+                parseInt(element.productPrice) * parseInt(element.productCount);
+
+            console.log("в get total conut " + parseInt(element.productPrice));
+            console.log("в get total conut " + parseInt(element.productCount));
+
+            console.log(total);
         });
 
         return total;

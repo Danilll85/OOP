@@ -10,6 +10,8 @@
 
 <body>
     <h1 id="username"></h1>
+    <h1 id="userLoyalityPoints"></h1>
+    <p>Если больше 5 очков, то скидка 5%</p>
     <div class="bodyOfCart">
         <% products.forEach(product=> { %>
             <div class="product-container">
@@ -19,7 +21,7 @@
                     </h2>
                     <p>Цена: <%= product.productPrice %>
                     </p>
-                    <p>Кол-во: товара: <%= product.productCounts %>
+                    <p>Кол-во: товара: <%= product.productCount %>
                     </p>
                 </div>
             </div>
