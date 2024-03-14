@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 import secret from "../config.js";
 import { Product } from "./Product.js";
+import db from "../DataBase.js";
 
 export class ShopingCart {
     listOfProducts = new Array();
@@ -43,10 +44,30 @@ export class ShopingCart {
             console.log(decodedData);
 
             // Отправляем имя пользователя обратно на клиент
-            res.json({ username: decodedData.username });
+            res.json({
+                username: decodedData.username,
+                loyalityPoints: decodedData.loyalityPoints,
+            });
         } catch (err) {
             console.log(`Ошибка на сервере (корзина) ${err}`);
         }
+    }
+
+    async addLoyalityPoints(req, res) {
+        const token = req.body.token;
+
+        const decodedData = jwt.verify(token, secret);
+
+        let { username, loyalityPoints } = decodedData;
+
+        const role = req.body.role;
+
+        //console.log(`addLoyalityPoints(server) ${username}`);
+        //console.log(`addLoyalityPoints(server) ${loyalityPoints}`);
+
+        const temp = db.editInfo(username, "loyalityPoints", 1, role);
+
+        res.json(temp);
     }
 
     getTotalCount() {
@@ -55,11 +76,6 @@ export class ShopingCart {
         this.listOfProducts.forEach((element) => {
             total +=
                 parseInt(element.productPrice) * parseInt(element.productCount);
-
-            console.log("в get total conut " + parseInt(element.productPrice));
-            console.log("в get total conut " + parseInt(element.productCount));
-
-            console.log(total);
         });
 
         return total;

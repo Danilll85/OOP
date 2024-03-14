@@ -11,7 +11,7 @@
 <body>
     <h1 id="username"></h1>
     <h1 id="userLoyalityPoints"></h1>
-    <p>Если больше 5 очков, то скидка 5%</p>
+    <p>Если больше 5 баллов, то скидка 5%</p>
     <div class="bodyOfCart">
         <% products.forEach(product=> { %>
             <div class="product-container">
@@ -31,10 +31,17 @@
         <p>Итого: <%= price %> рублей
         </p>
 
-        <button>Оплатить</button>
+        <label for="AddPhoneNumber">Введите номер телефона</label>
+        <input type="text" id="AddPhoneNumber" name="AddPhoneNumber" required><br>
+
+        <label for="AddDate">Введите дату доставки</label>
+        <input type="datetime" id="AddAddDate" name="AddAddDate" required><br>
+
+        <button id="payButton"><a href="/Order">Оплатить</a></button>
     </div>
+
 </body>
 
-<script src="ShopingCart.js"></script>
+<script src="ShopingCart(client).js"></script>
 
 </html>

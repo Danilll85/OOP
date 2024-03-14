@@ -104,6 +104,11 @@ app.get("/OrdersHistory", (req, res) => {
     res.render("OrdersHistory");
 });
 
+//Order Page (как чек короче)
+app.get("/Order", (req, res) => {
+    res.render("Order");
+});
+
 const start = async () => {
     try {
         mongoose

@@ -6,11 +6,12 @@ import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import secret from "./config.js";
 
-const generateAccesToken = (id, username, roles) => {
+const generateAccesToken = (id, username, roles, loyalityPoints) => {
     const payload = {
         id,
         username,
         roles,
+        loyalityPoints,
     };
     return jwt.sign(payload, secret, { expiresIn: "24h" });
 };
@@ -38,9 +39,10 @@ export class authController {
             const hashPassword = bcrypt.hashSync(password, 7);
 
             const user = new User({
-                username,
+                username: username,
                 password: hashPassword,
                 roles: "USER",
+                loyalityPoints: 0,
             });
 
             await user.save();
@@ -69,7 +71,8 @@ export class authController {
             const token = generateAccesToken(
                 user._id,
                 user.username,
-                user.roles
+                user.roles,
+                user.loyalityPoints
             );
             return res.json({ token });
         } catch (err) {
@@ -103,6 +106,7 @@ export class authController {
                 username,
                 password: hashPassword,
                 roles: "SELLER",
+                loyalityPoints: loyalityPoints,
             });
 
             await seller.save();
@@ -131,7 +135,8 @@ export class authController {
             const token = generateAccesToken(
                 seller._id,
                 seller.username,
-                seller.roles
+                seller.roles,
+                seller.loyalityPoints
             );
             return res.json({ token });
         } catch (err) {

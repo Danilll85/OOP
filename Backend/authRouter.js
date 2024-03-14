@@ -63,6 +63,12 @@ router.post(
     cart.showUserName
 );
 
+router.post(
+    "/ShopingCartAddLoyalityPoints",
+    check("token", "нет токена").notEmpty(),
+    cart.addLoyalityPoints
+);
+
 router.post("/AddToCart", cart.addProduct);
 
 export default router;

@@ -3,11 +3,20 @@ import { Schema, model } from "mongoose";
 // Определяем класс User
 export class User {
     loyalityPoints = 0;
+    orders = new Array();
 
     constructor(username, password) {
         this.username = username;
         this.password = password;
         this.roles = ["USER"];
+    }
+
+    getLoyalityPoints() {
+        return this.loyalityPoints;
+    }
+
+    getOrderHistory() {
+        return this.orders;
     }
 }
 
@@ -16,6 +25,7 @@ const userSchema = new Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     roles: [{ type: String, default: "USER" }],
+    loyalityPoints: { type: Number, required: true },
 });
 
 // Создаем модель User на основе схемы
