@@ -5,6 +5,11 @@ import authRouter from "./authRouter.js";
 import bodyParser from "body-parser";
 import dataBase from "./DataBase.js";
 import cart from "./models/ShopingCart.js";
+import jwt from "jsonwebtoken";
+import secret from "./config.js";
+import DB from "./DataBase.js";
+import { User } from "./models/User.js";
+import { Seller } from "./models/Seller.js";
 
 const PORT = 3000;
 const __dirname = path.resolve();
@@ -107,6 +112,38 @@ app.get("/OrdersHistory", (req, res) => {
 //Order Page (как чек короче)
 app.get("/Order", (req, res) => {
     res.render("Order");
+});
+
+//Обработчик заказов
+app.post("/api/order", async (req, res) => {
+    // Обработка запроса для оформления заказа
+
+    const token = req.body.token;
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { username } = decodedData;
+
+    const role = req.body.role;
+
+    const user = await DB.findUser(db, username, role);
+
+    const _id = user._id;
+
+    let newUser;
+    if (user.roles[0] === "USER") {
+        newUser = new User(user.username, user.password);
+    } else {
+        newUser = new Seller(user.username, user.password);
+    }
+
+    newUser.addOrder();
+
+    const obj = newUser.getOrderHistory();
+
+    await DB.updateUser(newUser.username, newUser.roles, obj);
+
+    res.send("Order placed successfully");
 });
 
 const start = async () => {

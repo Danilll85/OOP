@@ -2,7 +2,7 @@ const elements = document.getElementsByClassName("buy_button");
 const buyButtons = Array.from(elements);
 
 buyButtons.forEach((button) => {
-    const addButton = button.querySelector("#Add_button"); // Находим кнопку "Добавить в корзину" в текущем блоке
+    const addButton = button.querySelector("#Add_button");
 
     addButton.addEventListener("click", () => {
         const productCountInput = button.querySelector(
@@ -41,9 +41,11 @@ buyButtons.forEach((button) => {
                 }
                 return response.json();
             })
-            .then((result) => {
+            .then((data) => {
                 // Обработка успешного ответа от сервера
-                console.log(result);
+
+                // Обработка успешного ответа от сервера
+                const listOfProductsString = JSON.stringify(data.data);
             })
             .catch((error) => {
                 // Обработка ошибок

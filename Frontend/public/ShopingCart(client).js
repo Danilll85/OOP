@@ -20,7 +20,6 @@ fetch("/auth/ShopingCart", {
     );
 
 //Работа с баллами лояльности
-
 const element = document.getElementById("payButton");
 
 const token_2 = sessionStorage.getItem("token");
@@ -29,6 +28,9 @@ element.addEventListener("click", async (event) => {
     const role = JSON.parse(sessionStorage.getItem("role"));
 
     try {
+        const listOfProducts = JSON.parse(
+            sessionStorage.getItem("listOfProducts")
+        );
         const response = await fetch("/auth/ShopingCartAddLoyalityPoints", {
             method: "POST",
             headers: {
@@ -37,15 +39,16 @@ element.addEventListener("click", async (event) => {
             body: JSON.stringify({
                 token: token_2,
                 role: role ? role.role : "USER",
+                order: listOfProducts,
             }),
         }).then((response) => {
             if (response.ok) {
                 document.getElementById("userLoyalityPoints").textContent =
-                    "Баллы лояльности: " + data.loyalityPoints;
-
-                window.location.href = "/Order";
+                    "Баллы лояльности: " + response.loyalityPoints;
             }
         });
+
+        window.location.href = "/Order";
     } catch (err) {
         console.error("Баллы ...", err);
     }

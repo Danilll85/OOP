@@ -1,14 +1,18 @@
 import { Schema, model } from "mongoose";
+import order from "./Order.js";
 
 // Определяем класс User
 export class User {
-    loyalityPoints = 0;
-    orders = new Array();
-
     constructor(username, password) {
         this.username = username;
         this.password = password;
         this.roles = ["USER"];
+        this.orders = new Array();
+        this.loyalityPoints = 0;
+    }
+
+    addOrder() {
+        this.orders.push(order.pay(this.username));
     }
 
     getLoyalityPoints() {
@@ -26,24 +30,9 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     roles: [{ type: String, default: "USER" }],
     loyalityPoints: { type: Number, required: true },
+    orders: [{ type: Array }],
 });
 
-// Создаем модель User на основе схемы
 const userModel = model("User", userSchema);
 
-// Экспортируем модель User
 export default userModel;
-
-/*import { Schema, model } from "mongoose";
-
-// переопределить через класс
-const User = new Schema({
-    username: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
-    roles: [{ type: String, ref: "Role" }],
-});
-
-//module.exports = model("User", User);
-
-export default model("User", User);
-*/

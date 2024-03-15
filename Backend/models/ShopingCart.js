@@ -3,10 +3,14 @@ import jwt from "jsonwebtoken";
 import secret from "../config.js";
 import { Product } from "./Product.js";
 import db from "../DataBase.js";
+import Order from "./Order.js";
+import { User } from "./User.js";
 
 export class ShopingCart {
-    listOfProducts = new Array();
-    totalprice = 0;
+    constructor() {
+        this.listOfProducts = new Array();
+        this.totalprice = 0;
+    }
 
     getlistOfProducts() {
         return this.listOfProducts;
@@ -24,6 +28,8 @@ export class ShopingCart {
             this.totalprice += product.getProductPrice;
 
             this.listOfProducts.push(product);
+
+            res.json({ data: this.listOfProducts });
         } catch (err) {
             console.log(
                 `Ошибка в addProduct класса ShopingCart ${this.addProduct}`
@@ -31,19 +37,12 @@ export class ShopingCart {
         }
     };
 
-    makeOrder() {
-        //додумать логику
-    }
-
     showUserName(req, res) {
         try {
             const token = req.body.token;
 
             const decodedData = jwt.verify(token, secret);
 
-            console.log(decodedData);
-
-            // Отправляем имя пользователя обратно на клиент
             res.json({
                 username: decodedData.username,
                 loyalityPoints: decodedData.loyalityPoints,
@@ -58,12 +57,11 @@ export class ShopingCart {
 
         const decodedData = jwt.verify(token, secret);
 
-        let { username, loyalityPoints } = decodedData;
+        const { username } = decodedData;
+
+        let listOfProducts = req.body.order;
 
         const role = req.body.role;
-
-        //console.log(`addLoyalityPoints(server) ${username}`);
-        //console.log(`addLoyalityPoints(server) ${loyalityPoints}`);
 
         const temp = db.editInfo(username, "loyalityPoints", 1, role);
 
@@ -79,6 +77,14 @@ export class ShopingCart {
         });
 
         return total;
+    }
+
+    makeOrder(username, listOfProducts, role) {
+        const productListJSON = JSON.stringify(listOfProducts);
+
+        const order = new Order(productListJSON);
+
+        return order;
     }
 }
 

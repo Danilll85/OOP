@@ -4,6 +4,7 @@ import { User } from "./User.js";
 
 export class Seller extends User {
     constructor(username, hashPassword) {
+        super();
         this.username = username;
         this.password = hashPassword;
         this.roles = ["SELLER"];

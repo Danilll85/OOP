@@ -3,6 +3,7 @@ import controller from "./authController.js";
 import admin from "./models/Admin.js";
 import cart from "./models/ShopingCart.js";
 import { check } from "express-validator";
+import order from "./models/Order.js";
 //import authMiddleware from "./middlewaree/authMiddleware.js";
 //import roleMiddleware from "./middlewaree/roleMiddleware.js";
 
@@ -70,5 +71,7 @@ router.post(
 );
 
 router.post("/AddToCart", cart.addProduct);
+
+router.post("/CreateOrder", order.pay);
 
 export default router;
