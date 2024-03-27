@@ -10,12 +10,14 @@ import secret from "./config.js";
 import DB from "./DataBase.js";
 import { User } from "./models/User.js";
 import { Seller } from "./models/Seller.js";
+import os from "os";
 
 const PORT = 3000;
 const __dirname = path.resolve();
 
-const db = "mongodb://127.0.0.1:27017/Authentification";
-//const db = "mongodb://mongodb:27017/Authentification";
+//const db = "mongodb://127.0.0.1:27017/Authentification";
+//const db = "mongodb://27017/Authentification";
+const db = "mongodb://mongo:27017/Authentification";
 
 const app = express();
 
@@ -161,7 +163,7 @@ const start = async () => {
             console.log(`Server has been started on port ${PORT}`);
         });
     } catch (err) {
-        console.log(`Америка тонет братишка \n@ВАХО БРУКЛИН ${err}`);
+        console.error("Started app error", err);
     }
 };
 

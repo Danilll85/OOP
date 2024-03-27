@@ -1,7 +1,7 @@
 //Для списка в хедере
 const elements = document.getElementsByClassName("menu-item"); // все элементы на странице, которые имеют класс 'menu-item'
 for (let i = 0; i < elements.length; i++) {
-    elements[i].addEventListener("mousedown", showMenu); // Обработчик события. Когда происходит событие mousedown на элементе, вызывается функция showMenu
+    elements[i].addEventListener("mousemove", showMenu); // Обработчик события. Когда происходит событие mousedown на элементе, вызывается функция showMenu
     elements[i].addEventListener("mouseleave", hideMenu);
 }
 

@@ -103,10 +103,10 @@ export class authController {
             const hashPassword = bcrypt.hashSync(password, 7);
 
             const seller = new Seller({
-                username,
+                username: username,
                 password: hashPassword,
                 roles: "SELLER",
-                loyalityPoints: loyalityPoints,
+                loyalityPoints: 0,
             });
 
             await seller.save();

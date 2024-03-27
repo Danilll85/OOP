@@ -1,20 +1,11 @@
-# Используем официальный образ Node.js
 FROM node:latest
 
-# Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /app
+WORKDIR /app/Backend
 
-# Копируем зависимости приложения и устанавливаем их
-COPY package.json ./
-COPY package-lock.json ./
+COPY ./Backend .
 
 RUN npm install
 
-# Копируем исходный код приложения
-COPY . .
-
-# Экспортируем порт, который будет использоваться приложением
 EXPOSE 3000
 
-# Команда для запуска приложения
 CMD ["node", "index.js"]

@@ -43,21 +43,37 @@ ul {
 
 .menu {
     /* background-image: url("https://www.pinkvilla.com/pics/480x270/408794275_andrew-tate_202401.jpg"); */
-    background-color: wheat;
+    background-image: url("https://images.wallpaperscraft.ru/image/single/palmy_doroga_zakat_110515_1920x1080.jpg");
+    background-position: center;
     border: 1px solid red;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
 }
 
 .menushechka {
     border: 1px solid blue;
     display: flex;
     flex-direction: row;
+    > .menu-item {
+        list-style-type: none;
+        margin-right: 0.5em;
+    }
+}
+
+.search {
+    border: 1px solid red;
 }
 
 .Korzina {
     border: 1px solid red;
+    width: 10%;
     justify-self: flex-end;
+}
+
+#list_title {
+    font-size: 1.5em;
+    font-family: "Courier New", Courier, monospace;
+    color: black;
 }
 
 .sub-menu {
