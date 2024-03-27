@@ -1,3 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+.bodyOfCart {
+    margin: 20px;
+}
+
+.product-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.product-details {
+    padding: 10px;
+}
+
+.product-details h2 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.product-details p {
+    margin: 0;
+    margin-bottom: 5px;
+}
+
 .Payment {
-    border: 1px solid red;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.Payment p {
+    margin-bottom: 10px;
+}
+
+.Payment label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.Payment input[type="text"],
+.Payment input[type="datetime"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.Payment button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Payment button:hover {
+    background-color: #0056b3;
+}
+
+.Payment a {
+    color: #fff;
+    text-decoration: none;
 }

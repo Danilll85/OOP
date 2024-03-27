@@ -15,9 +15,12 @@ import os from "os";
 const PORT = 3000;
 const __dirname = path.resolve();
 
-//const db = "mongodb://127.0.0.1:27017/Authentification";
-//const db = "mongodb://27017/Authentification";
-const db = "mongodb://mongo:27017/Authentification";
+const db = "mongodb://127.0.0.1:27017/Authentification";
+
+// ====================================================
+//For Docker
+//const db = "mongodb://mongo:27017/Authentification";
+// ====================================================
 
 const app = express();
 

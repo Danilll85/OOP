@@ -33,42 +33,62 @@ ul {
 
 .main_title {
     color: black;
+    font-family: "Courier New", Courier, monospace, sans-serif;
+    position: relative;
+    top: 15vh; /* Перемещение сверху на 15% высоты экрана */
+    text-align: center; /* Выравнивание текста по центру */
+    margin-right: 5vw; /* Отступ справа на 5% ширины экрана */
+    margin-left: 5vw; /* Отступ слева на 5% ширины экрана */
+}
+
+/* .main_title {
+    color: black;
     align-items: center;
     justify-content: center;
     font-family: "Courier New", Courier, monospace, sans-serif;
     position: relative;
     top: 150px;
     right: 500px;
-}
+} */
 
 .menu {
     /* background-image: url("https://www.pinkvilla.com/pics/480x270/408794275_andrew-tate_202401.jpg"); */
     background-image: url("https://images.wallpaperscraft.ru/image/single/palmy_doroga_zakat_110515_1920x1080.jpg");
     background-position: center;
-    border: 1px solid red;
     display: flex;
+    border: 7px;
     flex-direction: row;
+    border-style: outset;
+    border-color: black;
 }
 
 .menushechka {
-    border: 1px solid blue;
+    width: 40%;
     display: flex;
     flex-direction: row;
     > .menu-item {
         list-style-type: none;
         margin-right: 0.5em;
+
+        /*Не работает*/
+        > .sub-menu li a {
+            font-style: italic;
+            color: black !important;
+            text-decoration: none;
+            overflow: hidden;
+            opacity: 0;
+            height: 0;
+        }
     }
 }
 
-.search {
-    border: 1px solid red;
-}
-
-.Korzina {
-    border: 1px solid red;
-    width: 10%;
-    justify-self: flex-end;
-}
+/* .sub-menu li a {
+    font-style: italic;
+    text-decoration: none;
+    overflow: hidden;
+    opacity: 0;
+    height: 0;
+} */
 
 #list_title {
     font-size: 1.5em;
@@ -76,16 +96,122 @@ ul {
     color: black;
 }
 
-.sub-menu {
-    overflow: hidden;
-    opacity: 0;
-    height: 0;
+.search_box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
 }
 
-.authorization {
-    /*Братишка, запомни одну фразу: всё будет, но не сразу*/
+.search_box input[type="search"] {
+    padding: 10px;
+    width: 200px;
+    opacity: 0.6;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
+.search_box button[type="submit"] {
+    padding: 10px 20px;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search_box button[type="submit"]:hover {
+    background-color: wheat;
+}
+
+.Korzina {
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: auto;
+    > #KorzinaForItems {
+        opacity: 0.7;
+    }
+
+    > #KorzinaForItems:hover {
+        background-color: wheat;
+    }
+
+    .log_in #Log_In_button {
+        text-decoration: none; /* Убираем подчеркивание текста */
+        background-color: ccc; /* Цвет фона кнопки */
+        color: black; /* Цвет текста */
+        border: none; /* Убираем границу кнопки */
+        padding: 10px 20px; /* Отступы внутри кнопки */
+        cursor: pointer; /* Изменяем курсор при наведении на кнопку */
+        border-radius: 5px; /* Скругление углов кнопки */
+        transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+    }
+
+    .log_in #Log_In_button:hover {
+        background-color: wheat; /* Изменяем цвет фона при наведении на кнопку */
+    }
+
+    .reg #Reg_button {
+        text-decoration: none; /* Убираем подчеркивание текста */
+        background-color: ccc; /* Цвет фона кнопки */
+        color: black; /* Цвет текста */
+        border: none; /* Убираем границу кнопки */
+        padding: 10px 20px; /* Отступы внутри кнопки */
+        cursor: pointer; /* Изменяем курсор при наведении на кнопку */
+        border-radius: 5px; /* Скругление углов кнопки */
+        transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+    }
+
+    .reg #Reg_button:hover {
+        background-color: wheat; /* Изменяем цвет фона при наведении на кнопку */
+    }
+
+    .for_sellers #for_sellers_button {
+        text-decoration: none; /* Убираем подчеркивание текста */
+        background-color: ccc; /* Цвет фона кнопки */
+        color: black; /* Цвет текста */
+        border: none; /* Убираем границу кнопки */
+        padding: 10px 20px; /* Отступы внутри кнопки */
+        cursor: pointer; /* Изменяем курсор при наведении на кнопку */
+        border-radius: 5px; /* Скругление углов кнопки */
+        transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+    }
+
+    .for_sellers #for_sellers_button:hover {
+        background-color: wheat; /* Изменяем цвет фона при наведении на кнопку */
+    }
+}
+
+.footer {
+    background-color: #333; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    padding: 20px; /* Отступы вокруг содержимого */
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+.footer button {
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    background-color: black; /* Цвет фона кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    border: none; /* Убираем границы кнопки */
+    border-radius: 5px; /* Закругляем углы кнопки */
+    text-decoration: none; /* Убираем подчеркивание у ссылки внутри кнопки */
+    cursor: pointer; /* Изменяем вид курсора при наведении */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета фона кнопки */
+}
+
+.footer button:hover {
+    background-color: wheat; /* Изменяем цвет фона кнопки при наведении */
+}
 /*
 order - порядок
 flex-direction - задание главной оси (row, column)

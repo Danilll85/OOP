@@ -1,9 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
 .container {
     display: flex;
     justify-content: space-between;
-    border: 1px solid red;
+    > .description {
+        justify-content: start;
+    }
+
+    > .log_in_seller {
+        justify-self: end;
+    }
+
+    align-items: center;
+    padding: 20px;
+}
+
+.log_in_seller {
+    margin-right: 20px;
+}
+
+.log_in_seller button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.log_in_seller button:hover {
+    background-color: #28a745;
 }
 
 .tools {
-    border: 1px solid red;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.addProductForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.addProductForm label {
+    margin-bottom: 5px;
+}
+
+.addProductForm select,
+.addProductForm input[type="text"],
+.addProductForm textarea,
+.addProductForm input[type="file"],
+.addProductForm input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.addProductForm button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addProductForm button:hover {
+    background-color: #218838;
+}
+
+#message {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffc107;
+    color: #333;
+    border-radius: 5px;
 }

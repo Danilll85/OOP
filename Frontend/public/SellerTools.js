@@ -1,3 +1,9 @@
+//для скрытия кнопок регистрации
+if (sessionStorage.getItem("token")) {
+    document.getElementById("reg_seller_button").style.display = "none";
+    document.getElementById("log_in_seller_button").style.display = "none";
+}
+
 const element = document.getElementById("addProductForm");
 element.addEventListener("submit", async (event) => {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы
