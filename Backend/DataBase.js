@@ -173,6 +173,37 @@ export class DataBase {
         }
     }
 
+    async findProducts(name) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            const collection = database.collection("products");
+
+            const result = await collection
+                .find({
+                    $or: [{ productTitle: { $regex: name, $options: "i" } }],
+                })
+                .toArray();
+            return result;
+        } catch (error) {
+            console.error("Data base connectin error:", error);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+
+        return; //array
+    }
+
     async getOrder(username) {}
 }
 

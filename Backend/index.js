@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import path from "path";
 import mongoose from "mongoose";
 import authRouter from "./authRouter.js";
@@ -10,6 +11,7 @@ import secret from "./config.js";
 import DB from "./DataBase.js";
 import { User } from "./models/User.js";
 import { Seller } from "./models/Seller.js";
+import katalog from "./Katalog.js";
 import os from "os";
 
 const PORT = 3000;
@@ -77,9 +79,26 @@ app.get("/SellerLogInStatus", (req, res) => {
     res.render("SellerLogInStatus");
 });
 
-// Products
+//Search
+app.use(
+    session({
+        secret: "mySecretKey", // Замените 'mySecretKey' на свой уникальный секретный ключ
+        resave: false,
+        saveUninitialized: false,
+        products: null,
+    })
+);
+
+app.post("/saveProducts", (req, res) => {
+    const { products } = req.body;
+    req.session.products = products; // Сохраняем продукты в сессии
+    res.sendStatus(200); // Отправляем успешный статус ответа
+});
+
 app.get("/Katalog", (req, res) => {
-    res.render("Katalog");
+    const products = req.session.products || []; // получаем продукты из сессии или пустой массив, если они не определены
+
+    res.render("Katalog", { products: products });
 });
 
 app.get("/CarsKatalog", async (req, res) => {
