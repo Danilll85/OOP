@@ -50,9 +50,9 @@ export class DataBase {
 
             const collection = database.collection(nameOfMongoDBCollection);
 
-            delete obj.listOfProducts;
-            delete obj.totalprice;
-            delete obj.role;
+            delete obj[0].listOfProducts;
+            delete obj[0].role;
+            delete obj[0].totalprice;
 
             await collection.updateOne(
                 { username: username },
