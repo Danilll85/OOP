@@ -68,13 +68,17 @@ export class ShopingCart {
         res.json(temp);
     }
 
-    getTotalCount() {
+    getTotalCount(loyalityPoints) {
         let total = 0;
 
         this.listOfProducts.forEach((element) => {
             total +=
                 parseInt(element.productPrice) * parseInt(element.productCount);
         });
+
+        if (loyalityPoints > 5) {
+            total = total - (total * 5) / 100;
+        }
 
         return total;
     }

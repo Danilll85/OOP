@@ -58,6 +58,18 @@ lout.addEventListener("click", () => {
 
 const cart = document.getElementById("KorzinaForItems");
 
-cart.addEventListener("click", () => {
+cart.addEventListener("click", async () => {
+    try {
+        const response = await fetch("/api/cartPoints", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token }),
+        });
+    } catch (err) {
+        console.log("Ошибка при получении токена", err);
+    }
+
     window.location.href = "/ShopingCart";
 });

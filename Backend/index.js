@@ -112,13 +112,25 @@ app.get("/CarsKatalog", async (req, res) => {
 });
 
 //Cart
+let tmp_0 = undefined;
+app.post("/api/cartPoints", (req, res) => {
+    tmp_0 = req.body.token;
+
+    res.status(200).send("ok");
+});
+
 app.get("/ShopingCart", (req, res) => {
+    const decodedData = jwt.verify(tmp_0, secret);
+
+    const { loyalityPoints } = decodedData;
+
     res.render("ShopingCart", {
         products: cart.getlistOfProducts(),
-        price: cart.getTotalCount(),
+        price: cart.getTotalCount(loyalityPoints),
     });
 });
 
+//Orders History
 let tmp = undefined;
 app.post("/api/token", (req, res) => {
     tmp = req.body.token;
@@ -126,7 +138,6 @@ app.post("/api/token", (req, res) => {
     res.status(200).send("ok");
 });
 
-//Orders History
 app.get("/OrdersHistory", async (req, res) => {
     const decodedData = jwt.verify(tmp, secret);
 
