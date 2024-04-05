@@ -1,4 +1,6 @@
 import { MongoClient } from "mongodb";
+import jwt from "jsonwebtoken";
+import secret from "./config.js";
 
 export class DataBase {
     async findAllItemsByTheirType(type, dbAdress) {
@@ -204,7 +206,42 @@ export class DataBase {
         return; //array
     }
 
-    async getOrder(username) {}
+    async getOrderHistory(token) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            const { username, role } = token;
+
+            let collection = undefined;
+
+            if (role === undefined) {
+                collection = database.collection("users");
+            } else {
+                collection = database.collection("sellers");
+            }
+
+            //Переписать запрос к бд,чтобы было для конкретного пользователья, а не для всех
+            const result = await collection.findOne({ username: username });
+
+            const orders = result.orders;
+
+            return orders;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
 }
 
 export default new DataBase();

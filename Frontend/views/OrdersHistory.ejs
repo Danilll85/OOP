@@ -4,12 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="OrdersHistory.css">
     <title>Orders History</title>
 </head>
 
 <body>
-</body>
+    <% orders.forEach(orderArr=> { %>
+        <% orderArr.forEach(order=> { %>
+            <div class="order-container">
+                <h2>Заказ пользователя <%= order.username %>
+                </h2>
+                <p>Дата заказа: <%= order.date %>
+                </p>
+                <p>Общая сумма заказа: <%= order.total %> рублей</p>
+                <p>Время заказа: <%= order.orderTime %>
+                </p>
+                <% if (order.products && order.products.length> 0) { %>
+                    <h3>Продукты:</h3>
+                    <% order.products.forEach(product=> { %>
+                        <div class="product">
+                            <div class="product-details">
+                                <h4>
+                                    <%= product.productTitle %>
+                                </h4>
+                                <p>Цена: <%= product.productPrice %> рублей</p>
+                                <p>Количество: <%= product.productCount %>
+                                </p>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p>Продукты отсутствуют</p>
+                                <% } %>
+            </div>
+            <% }); %>
+                <% }); %>
 
-<script src="OrdersHistoryOnClient.js"></script>
+</body>
 
 </html>

@@ -113,24 +113,26 @@ app.get("/CarsKatalog", async (req, res) => {
 
 //Cart
 app.get("/ShopingCart", (req, res) => {
-    let temp = new Array();
-
-    temp = cart.getlistOfProducts();
-
-    temp.forEach((element) => {
-        console.log(temp);
-    });
-
-    console.log(`total = ${cart.getTotalCount()}`);
     res.render("ShopingCart", {
         products: cart.getlistOfProducts(),
         price: cart.getTotalCount(),
     });
 });
 
+let tmp = undefined;
+app.post("/api/token", (req, res) => {
+    tmp = req.body.token;
+
+    res.status(200).send("ok");
+});
+
 //Orders History
-app.get("/OrdersHistory", (req, res) => {
-    res.render("OrdersHistory");
+app.get("/OrdersHistory", async (req, res) => {
+    const decodedData = jwt.verify(tmp, secret);
+
+    const orders = await DB.getOrderHistory(decodedData);
+
+    res.render("OrdersHistory", { orders });
 });
 
 //Order Page (как чек короче)
