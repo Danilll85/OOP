@@ -18,9 +18,15 @@ loginForm.addEventListener("submit", async (event) => {
             },
             body: JSON.stringify({ username, password }),
         });
-        // Перенаправляем пользователя на другую страницу или выполняем другие действия
-        // Например, переход на страницу домашнего кабинета
-        window.location.href = "/RegStatus";
+
+        if (response.ok) {
+            window.location.href = "/";
+            //window.location.href = "/RegStatus";
+        } else {
+            const errorMessage = await response.text();
+            alert("Ошибка аутентификации: " + errorMessage);
+            return;
+        }
     } catch (error) {
         console.error("Ошибка входа:", error);
         // Обработка ошибки входа

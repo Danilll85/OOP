@@ -116,7 +116,11 @@ let tmp_0 = undefined;
 app.post("/api/cartPoints", (req, res) => {
     tmp_0 = req.body.token;
 
-    res.status(200).send("ok");
+    if (tmp_0) {
+        res.status(200).send("ok");
+    } else {
+        res.status(500).send("not ok");
+    }
 });
 
 app.get("/ShopingCart", (req, res) => {
@@ -135,13 +139,23 @@ let tmp = undefined;
 app.post("/api/token", (req, res) => {
     tmp = req.body.token;
 
-    res.status(200).send("ok");
+    if (tmp) {
+        res.status(200).send("ok");
+    } else {
+        res.status(500).send("not ok");
+    }
 });
 
 app.get("/OrdersHistory", async (req, res) => {
     const decodedData = jwt.verify(tmp, secret);
 
-    const orders = await DB.getOrderHistory(decodedData);
+    let orders = await DB.getOrderHistory(decodedData);
+
+    if (orders == undefined) {
+        orders = [];
+    }
+
+    console.log("user order:", orders);
 
     res.render("OrdersHistory", { orders });
 });
@@ -163,7 +177,7 @@ app.post("/api/order", async (req, res) => {
 
     const role = req.body.role;
 
-    const user = await DB.findUser(db, username, role);
+    const user = await DB.findUser(username, role);
 
     const _id = user._id;
 

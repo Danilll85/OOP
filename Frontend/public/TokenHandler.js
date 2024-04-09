@@ -18,6 +18,13 @@ loginForm.addEventListener("submit", async (event) => {
             },
             body: JSON.stringify({ username, password }),
         });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            alert("Ошибка аутентификации: " + errorMessage);
+            return;
+        }
+
         const data = await response.json();
         const { token } = data;
         console.log("Полученный токен:", token);
@@ -26,7 +33,8 @@ loginForm.addEventListener("submit", async (event) => {
         sessionStorage.setItem("token", token);
         // Перенаправляем пользователя на другую страницу или выполняем другие действия
         // Например, переход на страницу домашнего кабинета
-        window.location.href = "/LogInStatus";
+        //window.location.href = "/LogInStatus";
+        window.location.href = "/";
     } catch (error) {
         console.error("Ошибка входа:", error);
         // Обработка ошибки входа

@@ -5,6 +5,7 @@ import roles from "./models/Role.js";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import secret from "./config.js";
+import DB from "./DataBase.js";
 
 const generateAccesToken = (id, username, roles, loyalityPoints) => {
     const payload = {
@@ -20,7 +21,6 @@ export class authController {
     async registration(req, res) {
         try {
             const errors = validationResult(req);
-            console.log(errors);
             if (!errors.isEmpty()) {
                 return res
                     .status(400)
@@ -28,8 +28,8 @@ export class authController {
             }
             const { username, password } = req.body;
 
-            const candidate = await User.findOne({ username });
-
+            //const candidate = await User.findOne({ username });
+            const candidate = await DB.findUser(username, "USER");
             if (candidate) {
                 return res.status(400).json({
                     message: "Пользователь с таким именем уже существует",
@@ -58,9 +58,12 @@ export class authController {
     async login(req, res) {
         try {
             const { username, password } = req.body;
-            const user = await User.findOne({ username });
-            if (!user) {
+            //const user = await user.findOne({ username });
+            const user = await DB.findUser(username, "USER");
+            console.log("user", user);
+            if (user === null) {
                 res.status(400).json({ message: "Пользователь не найден" });
+                return;
             }
 
             const validPassword = bcrypt.compareSync(password, user.password);
@@ -92,8 +95,8 @@ export class authController {
             }
             const { username, password } = req.body;
 
-            const candidate = await Seller.findOne({ username });
-
+            //const candidate = await Seller.findOne({ username });
+            const candidate = await DB.findUser(username, "SELLER");
             if (candidate) {
                 return res.status(400).json({
                     message: "Пользователь с таким именем уже существует",
@@ -122,9 +125,12 @@ export class authController {
     async sellerLogin(req, res) {
         try {
             const { username, password } = req.body;
-            const seller = await Seller.findOne({ username });
+            //const seller = await Seller.findOne({ username });
+            const seller = await DB.findUser(username, "SELLER");
             if (!seller) {
-                res.status(400).json({ message: "Пользователь не найден" });
+                return res
+                    .status(400)
+                    .json({ message: "Пользователь не найден" });
             }
 
             const validPassword = bcrypt.compareSync(password, seller.password);
