@@ -220,20 +220,14 @@ export class DataBase {
             const { username, roles } = token;
             let collection = undefined;
 
-            console.log("роль:", roles);
-
             if (roles == "USER") {
                 collection = database.collection("users");
             } else {
                 collection = database.collection("sellers");
             }
 
-            console.log("username:", username);
-
             //Переписать запрос к бд,чтобы было для конкретного пользователья, а не для всех
             const result = await collection.findOne({ username: username });
-
-            console.log("что пришло с бд", result);
 
             const orders = result.orders;
 

@@ -4,6 +4,51 @@ if (sessionStorage.getItem("token")) {
     document.getElementById("log_in_seller_button").style.display = "none";
 }
 
+// Находим поле ввода файла
+const fileInput = document.getElementById("productPhoto");
+
+// Добавляем обработчик события для изменения файла
+fileInput.addEventListener("change", (event) => {
+    // Получаем информацию о выбранном файле
+    const selectedFile = event.target.files[0];
+    console.log(selectedFile);
+});
+
+//Находим кнопку "Добавить товар"
+const addButton = document.querySelector('button[type="submit"]');
+
+let form = document.getElementsByClassName("addProductForm")[0];
+
+// Добавляем обработчик события на клик по кнопке
+addButton.addEventListener("click", (event) => {
+    event.preventDefault(); // Предотвращаем стандартное поведение кнопки
+
+    // Создаем новый объект FormData и добавляем данные из формы
+    const formData = new FormData(form);
+
+    // Отправляем данные на сервер
+    fetch("/auth/AdminModeration", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Ошибка при отправке формы");
+            } else {
+                alert("Товар успешно добавлен");
+            }
+        })
+        .then((data) => {
+            // Обработка данных
+            console.log(data);
+        })
+        .catch((error) => {
+            // Обработка ошибок
+            console.error("Ошибка:", error);
+        });
+});
+
+/*
 const element = document.getElementById("addProductForm");
 element.addEventListener("submit", async (event) => {
     event.preventDefault(); // Предотвращаем стандартное поведение отправки формы
@@ -16,7 +61,8 @@ element.addEventListener("submit", async (event) => {
         const productTitle = formData.get("productTitle");
         const productDescription = formData.get("productDescription");
         const productPrice = formData.get("productPrice");
-        const productPhoto = formData.get("productPhoto").files[0]; // Используем свойство files, а не file
+        //const productPhoto = formData.get("productPhoto").files[0];
+        const productPhoto = document.getElementById("productPhoto").files[0];
         const typeOfProduct = formData.get("typeOfProduct");
 
         try {
@@ -42,3 +88,4 @@ element.addEventListener("submit", async (event) => {
         alert("Вы не являетесь продавцом");
     }
 });
+*/

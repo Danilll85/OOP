@@ -5,6 +5,7 @@ import cart from "./models/ShopingCart.js";
 import { check } from "express-validator";
 import order from "./models/Order.js";
 import katalog from "./Katalog.js";
+import multer from "multer";
 //import authMiddleware from "./middlewaree/authMiddleware.js";
 //import roleMiddleware from "./middlewaree/roleMiddleware.js";
 
@@ -42,20 +43,43 @@ router.get("/users", controller.getUsers);
 //roleMiddleware(["USER"])
 //module.exports = router;
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // Указываем папку для сохранения файлов
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname); // Сохраняем файл с его оригинальным именем
+    },
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // Ограничение на размер файла (в данном случае 10MB)
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith("image/")) {
+            cb(null, true);
+        } else {
+            cb(new Error("Допустимы только изображения"));
+        }
+    },
+});
 router.post(
     "/AdminModeration",
-    [
-        check(
-            "productTitle",
-            "Название товара не должно быть пустым"
-        ).notEmpty(),
-        check(
-            "productDescription",
-            "Описание товара не должно быть пустым"
-        ).notEmpty(),
-        check("productPrice", "Добавьте фото товара").notEmpty(),
-        check("productPrice", "Цена товара не должно быть пустой").notEmpty(),
-    ],
+    upload.single("productPhoto"),
+    //[
+    //    check(
+    //        "productTitle",
+    //        "Название товара не должно быть пустым"
+    //    ).notEmpty(),
+    //    check(
+    //        "productDescription",
+    //        "Описание товара не должно быть пустым"
+    //    ).notEmpty(),
+    //    check("productPhoto", "Добавьте фото товара").notEmpty(),
+    //    check("productPrice", "Цена товара не должно быть пустой").notEmpty(),
+    //],
     admin.addProduct
 );
 

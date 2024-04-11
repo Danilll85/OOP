@@ -3,6 +3,7 @@ import Seller from "./Seller.js";
 import Product from "./Product.js";
 import fs from "fs";
 import { validationResult } from "express-validator";
+import multer from "multer";
 
 export class Admin extends Seller {
     async addProduct(req, res) {
@@ -19,15 +20,19 @@ export class Admin extends Seller {
                 typeOfProduct,
                 productTitle,
                 productDescription,
-                productPhoto,
+                //productPhoto,
                 productPrice,
             } = req.body;
 
-            if (!productPhoto) {
-                return res
-                    .status(400)
-                    .json({ error: "Файл изображения не найден" });
-            }
+            //const { productPhoto } = req.file;
+
+            //console.log(productPhoto);
+
+            //if (!productPhoto) {
+            //    return res
+            //        .status(400)
+            //        .json({ error: "Файл изображения не найден" });
+            //}
 
             const candidate = await Product.findOne({ productTitle });
 
@@ -37,15 +42,25 @@ export class Admin extends Seller {
                 });
             }
 
+            //считай единственный файл из папки uploads в переменную productPhoto, а затем удали его;
+            // Прочитайте файл из диска
+            const filePath = "uploads/" + req.file.filename; // Путь к загруженному файлу
+            const fileData = fs.readFileSync(filePath);
+
+            console.log(typeof fileData);
+
             const product = new Product({
                 productType: typeOfProduct,
                 productTitle: productTitle,
                 productDescription: productDescription,
-                productPhoto: productPhoto,
+                productPhoto: fileData,
                 productPrice: productPrice,
             });
 
             await product.save();
+
+            // Удалите файл с диска после сохранения его в базе данных
+            fs.unlinkSync(filePath);
 
             return res.json({
                 message: "Товар успешно добавлен",
