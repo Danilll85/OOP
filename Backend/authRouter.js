@@ -99,6 +99,18 @@ router.post("/AddToCart", cart.addProduct);
 
 router.post("/CreateOrder", order.pay);
 
-router.post("/Katalog", katalog.search);
+router.post(
+    "/Katalog",
+    async (req, res) => {
+        const { name } = req.body;
+        console.log("Это в путиии", name);
+
+        await katalog.search(name);
+
+        res.status(200).send();
+    }
+
+    //katalog.search(req, res)
+);
 
 export default router;

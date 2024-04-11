@@ -58,15 +58,16 @@ buyButtons.forEach((button) => {
 
 const token = sessionStorage.getItem("token");
 
+console.log("token:", token);
+
 const cart = document.getElementById("KorzinaForItems");
 
 cart.addEventListener("click", async () => {
+    console.log("тутуоталвыаод");
     try {
         const response = await fetch("/api/cartPoints", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token: token }),
         });
     } catch (err) {

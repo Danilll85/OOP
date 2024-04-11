@@ -80,23 +80,24 @@ app.get("/SellerLogInStatus", (req, res) => {
 });
 
 //Search
-app.use(
-    session({
-        secret: "mySecretKey", // Замените 'mySecretKey' на свой уникальный секретный ключ
-        resave: false,
-        saveUninitialized: false,
-        products: null,
-    })
-);
+//app.use(
+//    session({
+//        secret: "mySecretKey", // Замените 'mySecretKey' на свой уникальный секретный ключ
+//        resave: false,
+//        saveUninitialized: false,
+//        products: null,
+//    })
+//);
 
-app.post("/saveProducts", (req, res) => {
-    const { products } = req.body;
-    req.session.products = products; // Сохраняем продукты в сессии
-    res.sendStatus(200); // Отправляем успешный статус ответа
-});
+//app.post("/saveProducts", (req, res) => {
+//    const { products } = req.body;
+//    console.log(products);
+//    req.session.products = products; // Сохраняем продукты в сессии
+//    res.sendStatus(200); // Отправляем успешный статус ответа
+//});
 
 app.get("/Katalog", (req, res) => {
-    const products = req.session.products || []; // получаем продукты из сессии или пустой массив, если они не определены
+    const products = katalog.getProducts(); // получаем продукты из сессии или пустой массив, если они не определены
 
     res.render("Katalog", { products: products });
 });

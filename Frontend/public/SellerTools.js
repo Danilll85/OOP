@@ -26,6 +26,20 @@ addButton.addEventListener("click", (event) => {
     // Создаем новый объект FormData и добавляем данные из формы
     const formData = new FormData(form);
 
+    const productTitle = formData.get("productTitle");
+    const productDescription = formData.get("productDescription");
+    const productPrice = formData.get("productPrice");
+
+    if (
+        !(fileInput.files.length > 0) ||
+        productTitle == "" ||
+        productDescription == "" ||
+        productPrice == ""
+    ) {
+        alert("Добавьте данные в форму");
+        return;
+    }
+
     // Отправляем данные на сервер
     fetch("/auth/AdminModeration", {
         method: "POST",

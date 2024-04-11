@@ -36,7 +36,8 @@
                 <button type="button" id="Add_button">Добавить в корзину</button>
 
                 <label for="productCount">Кол-во товара:</label>
-                <input type="number" id="productCount<%=product.productTitle%>" name="productCount" required>
+                <input type="number" id="productCount<%=product.productTitle%>" name="productCount" value="0" min="0"
+                    required>
             </div>
         </div>
         <% }); %>

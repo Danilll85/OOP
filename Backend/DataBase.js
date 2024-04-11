@@ -193,6 +193,7 @@ export class DataBase {
                     $or: [{ productTitle: { $regex: name, $options: "i" } }],
                 })
                 .toArray();
+
             return result;
         } catch (error) {
             console.error("Data base connectin error:", error);

@@ -63,7 +63,7 @@ export class ShopingCart {
 
         const role = req.body.role;
 
-        const temp = db.editInfo(username, "loyalityPoints", 1, role);
+        const temp = await db.editInfo(username, "loyalityPoints", 1, role);
 
         res.json(temp);
     }
