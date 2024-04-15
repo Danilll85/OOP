@@ -21,7 +21,7 @@
     </div>
 
     <div class="tools">
-        <form class="addProductForm">
+        <form id="addProductForm">
             <div class="add_type">
                 <label for="typeOfProduct">Тип товара:</label>
                 <select name="typeOfProduct">
@@ -32,22 +32,31 @@
             </div>
             <div class="add_title">
                 <label for="productTitle">Название товара:</label>
-                <input type="text" id="productTitle" name="productTitle" required>
+                <input type="text" id="productTitle" name="productTitle">
             </div>
             <div class="add_description">
                 <label for="productDescription">Описание товара:</label>
-                <textarea id="productDescription" name="productDescription" required></textarea>
+                <textarea id="productDescription" name="productDescription"></textarea>
             </div>
             <div class="add_photo">
                 <label for="productPhoto">Фото товара:</label>
-                <input type="file" id="productPhoto" name="productPhoto" accept="image/*" required>
+                <input type="file" id="productPhoto" name="productPhoto" accept="image/*">
             </div>
             <div class="add_price">
                 <label for="productPrice">Цена товара:</label>
-                <input type="number" id="productPrice" name="productPrice" min="0" value="0" required>
+                <input type="number" id="productPrice" name="productPrice" min="0" value="0">
             </div>
+
+            <!--<div class="buttons">
+                <button type="submit">Добавить товар</button>
+                <button id="editButton">Изменить товар</button>
+                <button id="removeButton">Удалить товар</button>
+            </div>-->
+
             <button type="submit">Добавить товар</button>
+
         </form>
+
     </div>
 
     <div id="message">

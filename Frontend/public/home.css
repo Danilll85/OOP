@@ -67,9 +67,11 @@ ul {
     display: flex;
     flex-direction: row;
     > .menu-item {
+        display: none;
+        position: absolute;
+        top: 0;
         list-style-type: none;
-        margin-right: 0.5em;
-
+        left: 100%;
         /*Не работает*/
         > .sub-menu li a {
             font-style: italic;
@@ -223,3 +225,32 @@ flex-basis: - задает размер относительно главной 
 flex-shrink - отвечает за то, как быстро будет ужиматься элемент при сокращении пространстра (меняешь короче размеры окна мыщкой и элементы уменьшаются)
 flex-grow - определяет сколько пространства занимает элемент на экране (тут подробнее https://www.youtube.com/watch?v=eVZEwEQg4pg )
 */
+
+/*Модальное окно*/
+#catalog-dialog {
+    width: 300px;
+    height: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#open-modal-btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.change-letter-color {
+    color: red;
+}

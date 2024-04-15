@@ -77,3 +77,35 @@ cart.addEventListener("click", async () => {
 });
 
 //-------------------------------------------------------
+
+buyButtons.forEach((button) => {
+    const fav = button.querySelector("#favoritesButton");
+
+    fav.addEventListener("click", () => {
+        const productName = button.parentElement.querySelector(
+            ".product-details h2"
+        ).innerText;
+
+        // Отправляем данные на сервер
+        const data = {
+            productName: productName,
+        };
+
+        const token = sessionStorage.getItem("token");
+
+        // Отправляем запрос POST на сервер с данными о товаре
+        const response = fetch("/api/favour", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // Добавляем токен в заголовок
+            },
+            body: JSON.stringify(data),
+        }).then((response) => {
+            if (!response.ok) {
+                alert("Такой товар уже есть");
+                return;
+            }
+        });
+    });
+});

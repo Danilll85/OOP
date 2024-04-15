@@ -19,6 +19,7 @@ const productSchema = new Schema({
     productDescription: { type: String, required: true },
     productPhoto: { type: Buffer, required: true },
     productPrice: [{ type: String, required: true }],
+    //sellerName: { type: String },
 });
 
 // Создаем модель Product на основе схемы

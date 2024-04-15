@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import jwt from "jsonwebtoken";
 import secret from "./config.js";
+import Katalog from "./Katalog.js";
 
 export class DataBase {
     async findAllItemsByTheirType(type, dbAdress) {
@@ -103,6 +104,8 @@ export class DataBase {
             console.log("Connection closed");
         }
     }
+
+    async editProduct(obj) {}
 
     async findUser(username, role) {
         let client;
@@ -233,6 +236,125 @@ export class DataBase {
             const orders = result.orders;
 
             return orders;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async addFavoutitesProducts(username, role, obj) {
+        let client;
+        let flag = true;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = undefined;
+
+            if (role == "USER") {
+                collection = database.collection("users");
+            } else {
+                collection = database.collection("sellers");
+            }
+
+            const user = await collection.findOne({ username: username });
+
+            user.favouritesProducts.forEach((element) => {
+                if (element.productName === obj.productName) {
+                    flag = false;
+                }
+            });
+
+            if (!flag) {
+                return false;
+            }
+
+            //Переписать запрос к бд,чтобы было для конкретного пользователья, а не для всех
+            await collection.updateOne(
+                { username: username },
+                { $push: { favouritesProducts: obj } }
+            );
+
+            return true;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async getFavouritesProducts(username, role) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = undefined;
+            if (role == "USER") {
+                collection = database.collection("users");
+            } else {
+                collection = database.collection("sellers");
+            }
+
+            //Переписать запрос к бд,чтобы было для избранного
+            const user = await collection.findOne({ username: username });
+
+            const favProducts = user.favouritesProducts;
+
+            return favProducts;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async convertFromNamesToObjects(listOfNames) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let tmpArr = new Array();
+
+            listOfNames.forEach((element) => {
+                tmpArr.push(element.productName);
+            });
+
+            console.log(tmpArr);
+
+            //Переписать запрос к бд,чтобы было для избранного
+            const products = await database
+                .collection("products")
+                .find({ productTitle: { $in: tmpArr } })
+                .toArray();
+
+            return products;
         } catch (err) {
             console.error("Data base connectin error:", err);
         } finally {

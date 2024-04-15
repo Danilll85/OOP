@@ -12,43 +12,21 @@
     <nav>
         <div class="menu">
             <div class="menushechka">
-                <li class="menu-item">
-                    <a href="/Katalog" id="list_title">Алкоголь</a>
-                    <ul сlass="sub-menu">
-                        <li><a href="Katalog/Katalog.ejs" target="_blank">Виски</a></li>
-                        <li><a href="#">Ром</a></li>
-                        <li><a href="#">Вино</a></li>
-                        <li><a href="#">Пиво</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" id="list_title">Курение</a>
-                    <ul сlass="sub-menu">
-                        <li><a href="#">Сигареты</a></li>
-                        <li><a href="#">Сигары</a></li>
-                        <li><a href="#">Кальян</a></li>
-                        <li><a href="#">Nicarão</a></li>
-                    </ul>
-                </li>
+                <h1>KUR<span class="change-letter-color">O</span>EDOV STORE</h1>
+                <!--
                 <li class="menu-item">
                     <a href="/CarsKatalog" id="list_title">Машины</a>
                     <ul сlass="sub-menu">
-                        <li><a href="#">Porshe</a></li>
-                        <li><a href="#">Mercedes</a></li>
-                        <li><a href="#">BMW</a></li>
-                        <li><a href="#">Wolk</a></li>
+                        <li><a class="car-item">Porshe</a></li>
+                        <li><a class="car-item">Bugatti</a></li>
+                        <li><a class="car-item">Lamborgini</a></li>
+                        <li><a class="car-item">Ferrari</a></li>
                     </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="#" id="list_title">JETS</a>
-                    <ul сlass="sub-menu">
-                        <li><a href="#">plane_1</a></li>
-                        <li><a href="#">plane_2</a></li>
-                        <li><a href="#">plane_3</a></li>
-                        <li><a href="#">plane_4</a></li>
-                    </ul>
-                </li>
+                </li>-->
             </div>
+
+            <button id="open-modal-btn">Каталог</button>
+
             <div class="search_box">
                 <form class="search_box_class" action="" method="get">
                     <input name="search" placeholder="Искать здесь..." type="search">
@@ -80,7 +58,28 @@
                 </button>
             </div>
         </div>
+
+        <!-- Всплывающее окно слева -->
+        <dialog id="catalog-dialog">
+            <button id="close-modal-btn" onclick="closeModal()">Закрыть</button>
+            <ul>
+                <li class="menu-item">
+                    <a href="/CarsKatalog" id="list_title">Машины</a>
+                    <ul сlass="sub-menu">
+                        <li><a class="car-item">Porshe</a></li>
+                        <li><a class="car-item">Bugatti</a></li>
+                        <li><a class="car-item">Lamborgini</a></li>
+                        <li><a class="car-item">Ferrari</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </dialog>
+
+        <!--  -->
     </nav>
+
+
 
     <div class="main">
         <h1 class="main_title">МАЧО ДАЧО ХАТА ХАУС - МАРКЕТПЛЕЙС ДЛЯ НАСТОЯЩИХ МУЖЧИН</h1>
@@ -88,6 +87,8 @@
 
     <div class="footer">
         <button id="orderHistoryButton">История заказов</button>
+
+        <button id="favorites">Избранное</button>
     </div>
 
 </body>
@@ -95,6 +96,7 @@
 <script src="Home.js"></script>
 <script src="Search.js"></script>
 <script src="SendToken.js"></script>
+<script src="ModalWindow.js"></script>
 
 </html>
 

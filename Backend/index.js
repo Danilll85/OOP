@@ -80,21 +80,6 @@ app.get("/SellerLogInStatus", (req, res) => {
 });
 
 //Search
-//app.use(
-//    session({
-//        secret: "mySecretKey", // Замените 'mySecretKey' на свой уникальный секретный ключ
-//        resave: false,
-//        saveUninitialized: false,
-//        products: null,
-//    })
-//);
-
-//app.post("/saveProducts", (req, res) => {
-//    const { products } = req.body;
-//    console.log(products);
-//    req.session.products = products; // Сохраняем продукты в сессии
-//    res.sendStatus(200); // Отправляем успешный статус ответа
-//});
 
 app.get("/Katalog", (req, res) => {
     const products = katalog.getProducts(); // получаем продукты из сессии или пустой массив, если они не определены
@@ -104,7 +89,23 @@ app.get("/Katalog", (req, res) => {
 
 app.get("/CarsKatalog", async (req, res) => {
     try {
-        const products = await dataBase.findAllItemsByTheirType("Car", db);
+        let products = await dataBase.findAllItemsByTheirType("Car", db);
+
+        // Сортируем массив products по полю productTitle
+        products.sort((a, b) => {
+            const titleA = a.productTitle.toUpperCase();
+            const titleB = b.productTitle.toUpperCase();
+
+            if (titleA < titleB) {
+                return -1;
+            }
+            if (titleA > titleB) {
+                return 1;
+            }
+
+            return;
+        });
+
         res.render("CarsKatalog", { products: products });
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -125,19 +126,26 @@ app.post("/api/cartPoints", (req, res) => {
 });
 
 app.get("/ShopingCart", (req, res) => {
-    const decodedData = jwt.verify(tmp_0, secret);
+    if (tmp_0) {
+        const decodedData = jwt.verify(tmp_0, secret);
+        const { loyalityPoints } = decodedData;
 
-    const { loyalityPoints } = decodedData;
-
-    res.render("ShopingCart", {
-        products: cart.getlistOfProducts(),
-        price: cart.getTotalCount(loyalityPoints),
-    });
+        res.render("ShopingCart", {
+            products: cart.getlistOfProducts(),
+            price: cart.getTotalCount(loyalityPoints),
+        });
+    } else {
+        res.render("ShopingCart", {
+            products: [],
+            price: [0],
+        });
+    }
 });
 
 //Orders History
 let tmp = undefined;
 app.post("/api/token", (req, res) => {
+    //пост запрос для работы с токеном для получения данных в истории заказов и в избранном
     tmp = req.body.token;
 
     if (tmp) {
@@ -196,6 +204,43 @@ app.post("/api/order", async (req, res) => {
     await DB.updateUser(newUser.username, newUser.roles, obj);
 
     res.send("Order placed successfully");
+});
+
+//Добавление в избранное
+app.post("/api/favour", async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const obj = req.body;
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { username, roles } = decodedData;
+
+    const check = await DB.addFavoutitesProducts(username, roles, obj);
+
+    console.log(check);
+
+    if (!check) {
+        res.status(500).send("Товар уже есть в избранном");
+    } else {
+        res.status(200).send("товра добавлен в избранное");
+    }
+});
+
+//Избранное
+app.get("/FavouritesProducts", async (req, res) => {
+    //Запрос в БД по юзеру, отсюда придёт лист избранного и этот лист уже отгенерим;
+
+    const token = tmp;
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { username, roles } = decodedData;
+
+    let products = await DB.getFavouritesProducts(username, roles);
+
+    products = await DB.convertFromNamesToObjects(products);
+
+    res.render("FavouritesProducts", { products });
 });
 
 const start = async () => {

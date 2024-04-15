@@ -48,21 +48,21 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.addProductForm {
+#addProductForm {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.addProductForm label {
+#addProductForm label {
     margin-bottom: 5px;
 }
 
-.addProductForm select,
-.addProductForm input[type="text"],
-.addProductForm textarea,
-.addProductForm input[type="file"],
-.addProductForm input[type="number"] {
+#addProductForm select,
+#addProductForm input[type="text"],
+#addProductForm textarea,
+#addProductForm input[type="file"],
+#addProductForm input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -71,7 +71,7 @@ body {
     box-sizing: border-box;
 }
 
-.addProductForm button {
+#addProductForm button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #28a745;
@@ -82,7 +82,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.addProductForm button:hover {
+#addProductForm button:hover {
     background-color: #218838;
 }
 
@@ -92,4 +92,10 @@ body {
     background-color: #ffc107;
     color: #333;
     border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }

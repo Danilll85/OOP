@@ -1,4 +1,4 @@
-//Для списка в хедере
+//Для списка в модальном окне
 const elements = document.getElementsByClassName("menu-item"); // все элементы на странице, которые имеют класс 'menu-item'
 
 document.addEventListener("DOMContentLoaded", () => {

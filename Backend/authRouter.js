@@ -103,7 +103,6 @@ router.post(
     "/Katalog",
     async (req, res) => {
         const { name } = req.body;
-        console.log("Это в путиии", name);
 
         await katalog.search(name);
 
@@ -112,5 +111,11 @@ router.post(
 
     //katalog.search(req, res)
 );
+
+//router.post(
+//    "/AdminEditModeration",
+//    upload.single("productPhoto"),
+//    admin.editInfo
+//);
 
 export default router;
