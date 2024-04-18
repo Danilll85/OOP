@@ -5,7 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="ShopingCart.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <title>Shoping Cart</title>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            /* Ширина карты равна ширине родительского элемента */
+            max-width: 100%;
+            /* Максимальная ширина карты равна ширине родительского элемента */
+        }
+    </style>
 </head>
 
 <body>
@@ -19,28 +31,79 @@
                     <h2>
                         <%= product.productTitle %>
                     </h2>
-                    <p>Цена: <%= product.productPrice %>
+                    <button class="delItem" id="del">&#x2717</button>
+                    <p>
+                        Цена: <%= product.productPrice %>
                     </p>
-                    <p>Кол-во: товара: <%= product.productCount %>
+                    <p>
+                        Кол-во: товара: <%= product.productCount %>
                     </p>
                 </div>
             </div>
             <% }); %>
     </div>
     <div class="Payment">
-        <p>Итого: <%= price %> рублей
+        <p id="finallSum">Итого: <%= price %> рублей
         </p>
 
         <label for="AddPhoneNumber">Введите номер телефона</label>
         <input type="text" id="AddPhoneNumber" name="AddPhoneNumber" required maxlength="10" pattern="\d*"><br>
 
         <label for="AddDate">Выберите дату доставки</label>
-        <input type="date" id="AddAddDate" name="AddAddDate" required><br>
+        <input type="date" id="AddDate" name="AddDate" required><br>
 
+        <label for="">Выберите адрес доставки</label>
+        <input type="text" id="addressInput" disabled>
 
-        <button id="payButton"><a href="/Order">Оплатить</a></button>
+        <div id="map"></div> <br>
+
+        <button id="payButton">Оплатить</button>
     </div>
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script>
+        // Инициализация карты Leaflet
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        // Добавление тайлов OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Используем геокодер Nominatim от OpenStreetMap
+        var geocoder = L.Control.Geocoder.nominatim();
+
+        // Добавление маркера для выбора адреса
+        var marker = L.marker([51.5, -0.09], {
+            draggable: true
+        }).addTo(map);
+
+        // Обработчик события при перемещении маркера
+        marker.on('dragend', function (e) {
+            var latlng = e.target.getLatLng();
+            // Передаем координаты в геокодер для получения адреса
+            geocoder.reverse(latlng, map.options.crs.scale(map.getZoom()), function (results) {
+                var address = results[0].name;
+                // Выводим адрес в поле ввода
+                document.getElementById('addressInput').value = address;
+            });
+        });
+
+        // Обработчик события при клике на карту для установки нового маркера и получения адреса
+        map.on('click', function (e) {
+            // Устанавливаем новое положение маркера
+            marker.setLatLng(e.latlng);
+            var latlng = e.latlng;
+            // Передаем координаты в геокодер для получения адреса
+            geocoder.reverse(latlng, map.options.crs.scale(map.getZoom()), function (results) {
+                var address = results[0].name;
+                // Выводим адрес в поле ввода
+                document.getElementById('addressInput').value = address;
+            });
+        });
+
+    </script>
 </body>
 
 <script src="ShopingCart(client).js"></script>

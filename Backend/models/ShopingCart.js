@@ -9,7 +9,16 @@ import { User } from "./User.js";
 export class ShopingCart {
     constructor() {
         this.listOfProducts = new Array();
+        this.productsInCheck = new Array();
         this.totalprice = 0;
+    }
+
+    setproductsInCheck(listOfOrder) {
+        this.productsInCheck = listOfOrder;
+    }
+
+    getproductsInCheck() {
+        return this.productsInCheck;
     }
 
     getlistOfProducts() {
@@ -37,6 +46,12 @@ export class ShopingCart {
         }
     };
 
+    removeProduct(productName) {
+        this.listOfProducts = this.listOfProducts.filter((product) => {
+            return product.productTitle !== productName;
+        });
+    }
+
     showUserName(req, res) {
         try {
             const token = req.body.token;
@@ -52,20 +67,10 @@ export class ShopingCart {
         }
     }
 
-    async addLoyalityPoints(req, res) {
-        const token = req.body.token;
-
-        const decodedData = jwt.verify(token, secret);
-
-        const { username } = decodedData;
-
-        let listOfProducts = req.body.order;
-
-        const role = req.body.role;
-
+    async addLoyalityPoints(username, role) {
         const temp = await db.editInfo(username, "loyalityPoints", 1, role);
 
-        res.json(temp);
+        return temp;
     }
 
     getTotalCount(loyalityPoints) {

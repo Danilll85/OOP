@@ -54,6 +54,9 @@ addButton.addEventListener("click", (event) => {
         })
             .then((response) => {
                 if (!response.ok) {
+                    alert(
+                        "Описание продукта содержит запрещенные слова или фразы."
+                    );
                     throw new Error("Ошибка при отправке формы");
                 } else {
                     alert("Товар успешно добавлен");

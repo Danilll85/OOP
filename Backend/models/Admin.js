@@ -27,6 +27,27 @@ export class Admin extends Seller {
                 productPrice,
             } = req.body;
 
+            const bannedWords = [
+                "ПИЗДЕЦ",
+                "БЛЯТЬ",
+                "ХУЙ",
+                "FUCK",
+                "ЕБАТЬ",
+                "УБИТЬ",
+            ]; // Список запрещенных слов и фраз
+
+            const upperCaseDescription = productDescription.toUpperCase();
+
+            const hasBannedWord = bannedWords.some((word) =>
+                upperCaseDescription.includes(word)
+            );
+
+            if (hasBannedWord) {
+                return res.status(400).json({
+                    error: "Описание продукта содержит запрещенные слова или фразы.",
+                });
+            }
+
             const candidate = await Product.findOne({ productTitle });
 
             if (candidate) {

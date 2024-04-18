@@ -15,6 +15,12 @@
                 d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
         </svg></button>
 
+    <button id="sortByRating">Топ рейтинга</button>
+
+    <span id="typeOfProduct">
+        <%= products[0].productType%>
+    </span>
+
     <% products.forEach(product=> { %>
         <div class="product-container">
             <div class="product-image">
@@ -32,6 +38,8 @@
                 <p>Тип товара: <%= product.productType %>
                 </p>
 
+                <p>Средняя оценка: <%= product.middleRating%>
+                </p>
                 <div class="rating rating_set">
                     <div class="rating_body">
                         <div class="rating_active"></div>
@@ -43,7 +51,8 @@
                             <input type="radio" class="rating_item" value="5" name="rating">
                         </div>
                     </div>
-                    <div class="rating_value">3.6</div>
+                    <div class="rating_value">0</div>
+                    <!--<span class="str">оцените товар</span>-->
                 </div>
 
             </div>

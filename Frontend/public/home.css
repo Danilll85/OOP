@@ -228,8 +228,9 @@ flex-grow - определяет сколько пространства зан�
 
 /*Модальное окно*/
 #catalog-dialog {
+    position: fixed;
     width: 300px;
-    height: 300px;
+    height: 100%;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;

@@ -268,11 +268,15 @@ export class DataBase {
 
             const user = await collection.findOne({ username: username });
 
-            user.favouritesProducts.forEach((element) => {
-                if (element.productName === obj.productName) {
-                    flag = false;
-                }
-            });
+            if (user.favouritesProducts != undefined) {
+                user.favouritesProducts.forEach((element) => {
+                    if (element.productName === obj.productName) {
+                        flag = false;
+                    }
+                });
+            } else {
+                flag = true;
+            }
 
             if (!flag) {
                 return false;
@@ -355,6 +359,103 @@ export class DataBase {
                 .toArray();
 
             return products;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async addRating(productName, value, username, role) {
+        let flag = true;
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            const rating = {
+                username: username,
+                role: role,
+                ratingValue: value,
+            };
+
+            const product = await database
+                .collection("products")
+                .findOne({ productTitle: productName });
+
+            //доделать тут
+            let check = false;
+
+            if (product.rating) {
+                for (let i = 0; i < product.rating.length; i++) {
+                    if (
+                        product.rating[i].username == username &&
+                        product.rating[i].role[0] == role[0]
+                    ) {
+                        check = true; // т.е отзыв от конкретного пользователя есть
+                    }
+                }
+            }
+
+            if (check == false) {
+                await database
+                    .collection("products")
+                    .updateOne(
+                        { productTitle: productName },
+                        { $addToSet: { rating: rating } }
+                    );
+            } else {
+                await database.collection("products").updateOne(
+                    {
+                        productTitle: productName,
+                        "rating.username": username,
+                    },
+                    { $set: { "rating.$.ratingValue": value } }
+                );
+            }
+
+            return flag;
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async removeFromFavouritesProducts(username, role, obj) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = undefined;
+            if (role == "USER") {
+                collection = database.collection("users");
+            } else {
+                collection = database.collection("sellers");
+            }
+
+            const { productName } = obj;
+            await collection.updateOne(
+                { username: username },
+                { $pull: { favouritesProducts: { productName: productName } } }
+            );
         } catch (err) {
             console.error("Data base connectin error:", err);
         } finally {

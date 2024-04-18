@@ -1,10 +1,19 @@
 const elements = document.getElementsByClassName("buy_button");
 const buyButtons = Array.from(elements);
 
+const token = sessionStorage.getItem("token");
+
 buyButtons.forEach((button) => {
     const addButton = button.querySelector("#Add_button");
-
     addButton.addEventListener("click", () => {
+        console.log("МЫ в ивенте");
+        const t = JSON.stringify(token);
+
+        if (t == null) {
+            alert("Вы не зарегистрированы!");
+            return;
+        }
+
         const productCountInput = button.querySelector(
             'input[name="productCount"]'
         );
@@ -17,6 +26,10 @@ buyButtons.forEach((button) => {
 
         const productCount = productCountInput.value;
 
+        if (productCount == 0) {
+            alert("нельзя добавить 0 штук в корзину");
+            return;
+        }
         // Отправляем данные на сервер
         const data = {
             productName: productName,
@@ -24,7 +37,7 @@ buyButtons.forEach((button) => {
             productCount: productCount,
         };
 
-        const token = sessionStorage.getItem("token");
+        console.log(data);
 
         // Отправляем запрос POST на сервер с данными о товаре
         fetch("/auth/AddToCart", {
@@ -56,14 +69,11 @@ buyButtons.forEach((button) => {
 
 // -------------------------------------------
 
-const token = sessionStorage.getItem("token");
-
 console.log("token:", token);
 
 const cart = document.getElementById("KorzinaForItems");
 
 cart.addEventListener("click", async () => {
-    console.log("тутуоталвыаод");
     try {
         const response = await fetch("/api/cartPoints", {
             method: "POST",
@@ -74,6 +84,31 @@ cart.addEventListener("click", async () => {
         console.error("Ошибка при отправке токена", err);
     }
     window.location.href = "/ShopingCart";
+});
+
+const ratingSwitch = document.getElementById("sortByRating");
+
+ratingSwitch.addEventListener("click", async () => {
+    const t = document.getElementById("typeOfProduct").innerText;
+
+    console.log(t);
+
+    const data = { productType: t };
+
+    const res = await fetch("/getTypeOfProduct", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+        window.location.href = "/sortByRating";
+    } else {
+        alert("...!");
+        return;
+    }
 });
 
 //-------------------------------------------------------
@@ -152,25 +187,57 @@ function initRatings() {
         for (let index = 0; index < ratingItems.length; index++) {
             const ratingItem = ratingItems[index];
 
-            ratingItem.addEventListener("mouseenter", function (e) {
+            ratingItem.addEventListener("mouseenter", (e) => {
                 initRatingVars(rating);
+                console.log("ratingItem.value", ratingItem.value);
                 setRatingActiveWidth(ratingItem.value);
             });
 
-            ratingItem.addEventListener("mouseleave", function (e) {
+            ratingItem.addEventListener("mouseleave", (e) => {
                 setRatingActiveWidth();
             });
 
-            ratingItem.addEventListener("click", function (e) {
+            ratingItem.addEventListener("click", (e) => {
                 initRatingVars(rating);
+                //Отправка на сервер if да else
 
-                //Отправка на сервер if да else нет
+                console.log(
+                    "значение которое отправим на сервер",
+                    ratingItem.value
+                );
 
-                alert("Доработать отправку на сервер!");
+                // Получаем родительский элемент с информацией о товаре
+                const productDetails = rating.closest(".product-details");
 
+                // Получаем элемент с именем товара
+                const productNameElement = productDetails.querySelector("h2");
+
+                // Получаем текстовое содержимое элемента с именем товара
+                const productName = productNameElement.innerText;
+                const data = {
+                    productName: productName,
+                    rating: ratingItem.value,
+                };
+
+                const token = sessionStorage.getItem("token");
+
+                const response = fetch("/api/Rating", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`, // Добавляем токен в заголовок
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                alert("Спасибо за оценку!");
                 ratingValue.innerHTML = index + 1;
                 setRatingActiveWidth();
+
+                location.reload();
             });
         }
     }
 }
+
+//-----------------------------------------------------

@@ -4,16 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Order.css">
     <title>Order Page</title>
 </head>
 
 <body>
     <h1>Подтверждение заказа</h1>
 
-    <p>Информация о заказе</p>
-    <!-- после нажатия на главную создается объект заказа-->
-    <button><a href="/" id="OnHomePage">На главную</a></button>
+    <h2>Информация о заказе:</h2>
+    <ul>
+        <% products.forEach(product=> { %>
+            <% if (typeof product==='object' ) { %>
+                <li>
+                    <%= product.productTitle %> - <%= product.productPrice %> - <%= product.productCount %>
+                </li>
+                <% } else if (typeof product==='string' ) { %>
+                    <li>
+                        <%= product %>
+                    </li>
+                    <% } %>
+                        <% }); %>
+    </ul>
 
+    <!-- после нажатия на главную создается объект заказа-->
+    <button id="OnHomePage">Подтвердить заказ</button>
 
 </body>
 

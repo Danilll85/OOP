@@ -110,10 +110,20 @@ body {
 }
 
 .rating_value {
-    font-size: 50%;
-    line-height: 1;
-    padding: 0px 0px 0px 10px;
+    visibility: hidden;
 }
+
+.rating_value::after {
+    content: "оцените товар";
+}
+
+/* .str {
+    position: relative;
+    font-family: Arial, sans-serif;
+    right: 40%;
+    bottom: 15%;
+    font-size: 50%;
+} */
 
 .rating_body {
     position: relative;
@@ -133,7 +143,7 @@ body {
 }
 
 .rating_item {
-    flex: 0 0 20%;
+    flex: 0 0 15%;
     height: 100%;
     opacity: 0;
 }
@@ -155,4 +165,28 @@ body {
     top: 0;
     left: 0;
     color: #ffd300;
+}
+
+#sortByRating {
+    background-color: #ff8c00; /* Оранжевый цвет */
+    color: white; /* Белый цвет текста */
+    border: none; /* Убираем границу */
+    padding: 10px 20px; /* Поля вокруг текста */
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 20px; /* Скругление углов */
+    cursor: pointer; /* Изменяем курсор при наведении */
+    outline: none; /* Убираем рамку фокуса */
+    transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+}
+
+#sortByRating:hover {
+    background-color: #ff6f00; /* Изменяем цвет при наведении */
+}
+
+#sortByRating:active {
+    background-color: #ff4500; /* Изменяем цвет при нажатии */
+}
+
+span {
+    opacity: 0;
 }

@@ -6,6 +6,9 @@ import { check } from "express-validator";
 import order from "./models/Order.js";
 import katalog from "./Katalog.js";
 import multer from "multer";
+import jwt from "jsonwebtoken";
+import secret from "./config.js";
+
 //import authMiddleware from "./middlewaree/authMiddleware.js";
 //import roleMiddleware from "./middlewaree/roleMiddleware.js";
 
@@ -89,10 +92,29 @@ router.post(
     cart.showUserName
 );
 
+export let infoForCheck = undefined;
 router.post(
     "/ShopingCartAddLoyalityPoints",
     check("token", "нет токена").notEmpty(),
-    cart.addLoyalityPoints
+    async (req, res) => {
+        const token = req.body.token;
+
+        const decodedData = jwt.verify(token, secret);
+
+        const { username } = decodedData;
+
+        const role = req.body.role;
+
+        const products = req.body.order;
+
+        cart.setproductsInCheck(products);
+
+        infoForCheck = products;
+
+        const result = cart.addLoyalityPoints(username, role);
+
+        res.json(result);
+    }
 );
 
 router.post("/AddToCart", cart.addProduct);

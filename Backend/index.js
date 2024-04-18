@@ -12,6 +12,7 @@ import DB from "./DataBase.js";
 import { User } from "./models/User.js";
 import { Seller } from "./models/Seller.js";
 import katalog from "./Katalog.js";
+import { infoForCheck } from "./authRouter.js";
 import os from "os";
 
 const PORT = 3000;
@@ -82,11 +83,51 @@ app.get("/SellerLogInStatus", (req, res) => {
 //Search
 
 app.get("/Katalog", (req, res) => {
-    const products = katalog.getProducts(); // получаем продукты из сессии или пустой массив, если они не определены
+    const products = katalog.getProducts();
+
+    // Сортируем массив products по полю productTitle
+    products.sort((a, b) => {
+        const titleA = a.productTitle.toUpperCase();
+        const titleB = b.productTitle.toUpperCase();
+
+        if (titleA < titleB) {
+            return -1;
+        }
+        if (titleA > titleB) {
+            return 1;
+        }
+
+        return;
+    });
+
+    products.forEach((element) => {
+        if (element.rating == undefined) {
+            element["middleRating"] = "Пока еще нет оценок";
+        } else {
+            element["middleRating"] = conv(element);
+        }
+    });
+
+    function conv(element) {
+        let arr = new Array();
+
+        for (let i = 0; i < element.rating.length; i++) {
+            arr.push(element.rating[i].ratingValue);
+        }
+
+        let sum = 0;
+
+        arr.forEach((elem) => {
+            sum += Number(elem);
+        });
+
+        return sum / arr.length;
+    }
 
     res.render("Katalog", { products: products });
 });
 
+//основные страницы товаров
 app.get("/CarsKatalog", async (req, res) => {
     try {
         let products = await dataBase.findAllItemsByTheirType("Car", db);
@@ -106,12 +147,137 @@ app.get("/CarsKatalog", async (req, res) => {
             return;
         });
 
+        products.forEach((element) => {
+            if (element.rating == undefined) {
+                element["middleRating"] = "Пока еще нет оценок";
+            } else {
+                element["middleRating"] = conv(element);
+            }
+        });
+
+        function conv(element) {
+            let arr = new Array();
+
+            for (let i = 0; i < element.rating.length; i++) {
+                arr.push(element.rating[i].ratingValue);
+            }
+
+            let sum = 0;
+
+            arr.forEach((elem) => {
+                sum += Number(elem);
+            });
+
+            return sum / arr.length;
+        }
+
         res.render("CarsKatalog", { products: products });
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get("/Alcohol", async (req, res) => {
+    try {
+        let products = await dataBase.findAllItemsByTheirType("Alcohol", db);
+
+        // Сортируем массив products по полю productTitle
+        products.sort((a, b) => {
+            const titleA = a.productTitle.toUpperCase();
+            const titleB = b.productTitle.toUpperCase();
+
+            if (titleA < titleB) {
+                return -1;
+            }
+            if (titleA > titleB) {
+                return 1;
+            }
+
+            return;
+        });
+
+        products.forEach((element) => {
+            if (element.rating == undefined) {
+                element["middleRating"] = "Пока еще нет оценок";
+            } else {
+                element["middleRating"] = conv(element);
+            }
+        });
+
+        function conv(element) {
+            let arr = new Array();
+
+            for (let i = 0; i < element.rating.length; i++) {
+                arr.push(element.rating[i].ratingValue);
+            }
+
+            let sum = 0;
+
+            arr.forEach((elem) => {
+                sum += Number(elem);
+            });
+
+            return sum / arr.length;
+        }
+
+        res.render("CarsKatalog", { products: products });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get("/Clothes", async (req, res) => {
+    try {
+        let products = await dataBase.findAllItemsByTheirType("Clothes", db);
+
+        // Сортируем массив products по полю productTitle
+        products.sort((a, b) => {
+            const titleA = a.productTitle.toUpperCase();
+            const titleB = b.productTitle.toUpperCase();
+
+            if (titleA < titleB) {
+                return -1;
+            }
+            if (titleA > titleB) {
+                return 1;
+            }
+
+            return;
+        });
+
+        products.forEach((element) => {
+            if (element.rating == undefined) {
+                element["middleRating"] = "Пока еще нет оценок";
+            } else {
+                element["middleRating"] = conv(element);
+            }
+        });
+
+        function conv(element) {
+            let arr = new Array();
+
+            for (let i = 0; i < element.rating.length; i++) {
+                arr.push(element.rating[i].ratingValue);
+            }
+
+            let sum = 0;
+
+            arr.forEach((elem) => {
+                sum += Number(elem);
+            });
+
+            return sum / arr.length;
+        }
+
+        res.render("Clothes", { products: products });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+//
 
 //Cart
 let tmp_0 = undefined;
@@ -125,6 +291,7 @@ app.post("/api/cartPoints", (req, res) => {
     }
 });
 
+//Корзина
 app.get("/ShopingCart", (req, res) => {
     if (tmp_0) {
         const decodedData = jwt.verify(tmp_0, secret);
@@ -140,6 +307,24 @@ app.get("/ShopingCart", (req, res) => {
             price: [0],
         });
     }
+});
+
+app.post("/api/ChangeShopingCart", (req, res) => {
+    const data = req.body;
+
+    const { productName } = data;
+
+    console.log(data);
+
+    console.log(productName);
+
+    console.log(cart.getlistOfProducts());
+
+    cart.removeProduct(productName);
+
+    console.log(cart.getlistOfProducts());
+
+    res.status(200).send();
 });
 
 //Orders History
@@ -171,7 +356,11 @@ app.get("/OrdersHistory", async (req, res) => {
 
 //Order Page (как чек короче)
 app.get("/Order", (req, res) => {
-    res.render("Order");
+    const products = cart.getproductsInCheck();
+
+    console.log(products);
+
+    res.render("Order", { products: products });
 });
 
 //Обработчик заказов
@@ -198,6 +387,8 @@ app.post("/api/order", async (req, res) => {
     }
 
     newUser.addOrder();
+
+    console.log(newUser);
 
     const obj = newUser.getOrderHistory();
 
@@ -226,11 +417,15 @@ app.post("/api/favour", async (req, res) => {
     }
 });
 
+let insuranceToken = undefined;
+
 //Избранное
 app.get("/FavouritesProducts", async (req, res) => {
     //Запрос в БД по юзеру, отсюда придёт лист избранного и этот лист уже отгенерим;
 
-    const token = tmp;
+    let token = tmp;
+
+    if (!token) token = insuranceToken;
 
     const decodedData = jwt.verify(token, secret);
 
@@ -240,7 +435,163 @@ app.get("/FavouritesProducts", async (req, res) => {
 
     products = await DB.convertFromNamesToObjects(products);
 
+    products.forEach((element) => {
+        if (element.rating == undefined) {
+            element["middleRating"] = "Пока еще нет оценок";
+        } else {
+            element["middleRating"] = conv(element);
+        }
+    });
+
+    function conv(element) {
+        let arr = new Array();
+
+        for (let i = 0; i < element.rating.length; i++) {
+            arr.push(element.rating[i].ratingValue);
+        }
+
+        let sum = 0;
+
+        arr.forEach((elem) => {
+            sum += Number(elem);
+        });
+
+        return sum / arr.length;
+    }
+
     res.render("FavouritesProducts", { products });
+});
+
+//Удаление из избранного
+app.post("/api/RemoveFavouritesProduct", async (req, res) => {
+    const token = tmp;
+    insuranceToken = tmp;
+
+    const obj = req.body;
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { username, roles } = decodedData;
+
+    console.log(username, roles);
+
+    await DB.removeFromFavouritesProducts(username, roles, obj);
+
+    console.log("Удаление отработано");
+    return res.status(200).send("Удалено");
+});
+
+//Рейтинг
+app.post("/api/Rating", async (req, res) => {
+    const { productName, rating } = req.body;
+    let token = req.headers.authorization.split(" ")[1];
+
+    if (!token) {
+        token = tmp;
+        insuranceToken = tmp;
+    }
+
+    console.log(typeof token);
+    console.log(token);
+
+    if (token === "null") {
+        res.status(500).send("Вы не авторизированы");
+    } else {
+        console.log("Продолжаем");
+        const decodedData = jwt.verify(token, secret);
+
+        const { username, roles } = decodedData;
+
+        console.log(username, roles);
+
+        await DB.addRating(productName, rating, username, roles);
+
+        res.status(200).send("оценка товара добавлена");
+    }
+
+    return;
+});
+
+//Топ по рейтингу
+
+let type = undefined;
+app.post("/getTypeOfProduct", (req, res) => {
+    const { productType } = req.body;
+
+    console.log("мы в getTypeOfProduct и значение:", productType);
+
+    type = productType;
+
+    console.log(typeof type);
+
+    if (!type) {
+        res.status(500).send();
+    } else {
+        res.status(200).send();
+    }
+});
+
+app.get("/sortByRating", async (req, res) => {
+    try {
+        let products = await dataBase.findAllItemsByTheirType(type, db);
+
+        let sortByRating = new Array();
+
+        products.map((elem) => {
+            if (elem.rating != undefined) {
+                sortByRating.push(elem);
+            }
+        });
+
+        sortByRating.map((elem) => {
+            elem["middleRating"] = conv(elem);
+        });
+
+        function conv(element) {
+            let arr = new Array();
+
+            for (let i = 0; i < element.rating.length; i++) {
+                arr.push(element.rating[i].ratingValue);
+            }
+
+            console.log(arr);
+            let sum = 0;
+
+            arr.forEach((elem) => {
+                sum += Number(elem);
+            });
+
+            console.log(sum / arr.length);
+            return sum / arr.length;
+        }
+
+        // Сортируем массив sortByRating по полю rating[2]
+        sortByRating.sort((a, b) => {
+            const titleA = Number(a.middleRating);
+            const titleB = Number(b.middleRating);
+
+            if (titleA > titleB) {
+                return -1;
+            }
+            if (titleA < titleB) {
+                return 1;
+            }
+
+            return;
+        });
+
+        console.log("Элементы имеющие среднюю оценку");
+        sortByRating.forEach((element) => {
+            console.log(element.productTitle, element.middleRating);
+        });
+
+        products = sortByRating;
+
+        res.render("sortByRating", { products: products });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 const start = async () => {
