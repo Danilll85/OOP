@@ -76,11 +76,11 @@ addButton.addEventListener("click", (event) => {
     }
 });
 
-//const editButton = document.getElementById("editProduct");
+//Удалить товар
 
-/*
-//Изменить товар
-editButton.addEventListener("click", (event) => {
+const removeButton = document.getElementById("removeItem");
+
+removeButton.addEventListener("click", (event) => {
     event.preventDefault(); // Предотвращаем стандартное поведение кнопки
 
     const roleObj = JSON.parse(sessionStorage.getItem("role"));
@@ -89,36 +89,33 @@ editButton.addEventListener("click", (event) => {
         // Создаем новый объект FormData и добавляем данные из формы
         const formData = new FormData(form);
 
-        const typeOfProduct = formData.get("typeOfProduct");
         const productTitle = formData.get("productTitle");
-        const productDescription = formData.get("productDescription");
-        const productPrice = formData.get("productPrice");
+        const typeOfProduct = formData.get("typeOfProduct");
 
-        let sendData = { typeOfProduct: typeOfProduct };
-
-        if (fileInput.files.length > 0) {
-            sendData["productPhoto"] = fileInput;
-        } else if (productTitle != "") {
-            sendData["productTitle"] = productTitle;
-        } else if (productDescription != "") {
-            sendData["productDescription"] = productDescription;
-        } else if (productPrice == "") {
-            sendData["productPrice"] = productPrice;
-        } else {
+        if (productTitle == "") {
             alert("Добавьте данные в форму");
             return;
         }
 
+        const data = {
+            productTitle: productTitle,
+            typeOfProduct: typeOfProduct,
+        };
+
+        //formData.append("token", JSON.stringify(token));
         // Отправляем данные на сервер
-        fetch("/auth/AdminModeration", {
+        fetch("/auth/AdminRemove", {
             method: "POST",
-            body: productPrice,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
         })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Ошибка при отправке формы");
                 } else {
-                    alert("Товар успешно добавлен");
+                    alert("Товар успешно удален");
                 }
             })
             .then((data) => {
@@ -133,4 +130,4 @@ editButton.addEventListener("click", (event) => {
         alert("Вы не являетесь продавцом");
         return;
     }
-});*/
+});

@@ -71,20 +71,18 @@ const upload = multer({
 router.post(
     "/AdminModeration",
     upload.single("productPhoto"),
-    //[
-    //    check(
-    //        "productTitle",
-    //        "Название товара не должно быть пустым"
-    //    ).notEmpty(),
-    //    check(
-    //        "productDescription",
-    //        "Описание товара не должно быть пустым"
-    //    ).notEmpty(),
-    //    check("productPhoto", "Добавьте фото товара").notEmpty(),
-    //    check("productPrice", "Цена товара не должно быть пустой").notEmpty(),
-    //],
     admin.addProduct
 );
+
+router.post("/AdminRemove", async (req, res) => {
+    const data = req.body;
+
+    const { productTitle, typeOfProduct } = data;
+
+    await admin.removeItem(productTitle, typeOfProduct);
+
+    res.status(200).send("Товар удален");
+});
 
 router.post(
     "/ShopingCart",

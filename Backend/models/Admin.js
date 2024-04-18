@@ -125,6 +125,10 @@ export class Admin extends Seller {
             res.status(400).json({ message: "Add Product error" });
         }
     }
+
+    async removeItem(productTitle, typeOfProduct) {
+        await DB.removeFromProducts(productTitle, typeOfProduct);
+    }
 }
 
 export default new Admin();

@@ -465,6 +465,35 @@ export class DataBase {
             }
         }
     }
+
+    async removeFromProducts(productTitle, typeOfProduct) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = database.collection("products");
+
+            console.log(productTitle, typeOfProduct);
+
+            await collection.deleteOne({
+                productType: typeOfProduct,
+                productTitle: productTitle,
+            });
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
 }
 
 export default new DataBase();
