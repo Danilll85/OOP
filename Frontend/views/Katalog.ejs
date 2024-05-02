@@ -15,10 +15,13 @@
         </svg></button>
     <button id="sortByRating">Топ рейтинга</button>
 
+    <h2>
+        Скидка от магазина <%= products[0].discountByAdmin%> %
+    </h2>
+
     <span id="typeOfProduct">
         <%= products[0].productType%>
     </span>
-
 
     <% products.forEach(product=> { %>
         <div class="product-container">
@@ -34,25 +37,52 @@
                     <%= product.productDescription %>
                 </p>
                 <p>Цена: <%= product.productPrice %> рублей</p>
-                <p>Тип товара: <%= product.productType %>
-                </p>
+                <% let flag=false; let discount=undefined;if(username !=undefined){
+                    product.discountByAdminForUsers.forEach((elem)=> {
 
-                <p>Средняя оценка: <%= product.middleRating%>
-                </p>
+                    if(elem.username == username){
+                    flag = true;
+                    discount = elem.discountProcent;
+                    }
 
-                <div class="rating rating_set">
-                    <div class="rating_body">
-                        <div class="rating_active"></div>
-                        <div class="rating_items">
-                            <input type="radio" class="rating_item" value="1" name="rating">
-                            <input type="radio" class="rating_item" value="2" name="rating">
-                            <input type="radio" class="rating_item" value="3" name="rating">
-                            <input type="radio" class="rating_item" value="4" name="rating">
-                            <input type="radio" class="rating_item" value="5" name="rating">
-                        </div>
-                    </div>
-                    <div class="rating_value">0</div>
-                </div>
+                    })}
+                    %>
+
+                    <% if(product.productDiscount !=undefined && product.productDiscount !="0" && flag==false){ %>
+
+                        <p>Скидка от продавца <%= product.productDiscount%> %</p>
+                        <% }%>
+
+                            <% if(product.productDiscount==undefined && flag==true){ %>
+                                <p>Ваша индивидуальная cкидка <%= discount %> %</p>
+                                <% }%>
+
+                                    <% if(product.productDiscount!=undefined && product.productDiscount!="0" &&
+                                        flag==true){ %>
+                                        <p>Скидка от продавца <%= product.productDiscount%> %</p>
+                                        <p>Ваша индивидуальная cкидка <%= discount %> %</p>
+                                        <p>ВНИМАНИЕ! скидки не суммируются</p>
+                                        <% }%>
+
+                                            <p>Тип товара: <%= product.productType %>
+                                            </p>
+
+                                            <p>Средняя оценка: <%= product.middleRating%>
+                                            </p>
+
+                                            <div class="rating rating_set">
+                                                <div class="rating_body">
+                                                    <div class="rating_active"></div>
+                                                    <div class="rating_items">
+                                                        <input type="radio" class="rating_item" value="1" name="rating">
+                                                        <input type="radio" class="rating_item" value="2" name="rating">
+                                                        <input type="radio" class="rating_item" value="3" name="rating">
+                                                        <input type="radio" class="rating_item" value="4" name="rating">
+                                                        <input type="radio" class="rating_item" value="5" name="rating">
+                                                    </div>
+                                                </div>
+                                                <div class="rating_value">0</div>
+                                            </div>
 
 
             </div>
@@ -68,5 +98,5 @@
         <% }); %>
 </body>
 
-<!--<script src="SearchPage.js"></script>-->
+<!-- <script src="SearchPage.js"></script>-->
 <script src="Katalog.js"></script>

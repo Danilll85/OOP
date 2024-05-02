@@ -48,6 +48,9 @@
                     }
 
                     })}
+                    console.log(`product.productTitle: ${product.productTitle}\nproduct.productDiscount:
+                    ${product.productDiscount}\nflag: ${flag}\n discount: ${discount}\n\n`);
+
                     %>
 
                     <% if(product.productDiscount !=undefined && product.productDiscount !="0" && flag==false){ %>
@@ -55,7 +58,7 @@
                         <p>Скидка от продавца <%= product.productDiscount%> %</p>
                         <% }%>
 
-                            <% if(product.productDiscount==undefined && flag==true){ %>
+                            <% if((product.productDiscount==0 || product.productDiscount==undefined) && flag==true){ %>
                                 <p>Ваша индивидуальная cкидка <%= discount %> %</p>
                                 <% }%>
 

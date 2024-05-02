@@ -164,10 +164,18 @@ router.post(
     "/Katalog",
     async (req, res) => {
         const { name } = req.body;
+        let token = req.headers.authorization.split(" ")[1];
 
-        await katalog.search(name);
+        console.log(typeof token);
 
-        res.status(200).send();
+        const result = await katalog.search(name, token);
+
+        console.log("result", result);
+        if (result) {
+            res.status(200).send();
+        } else {
+            res.status(500).send();
+        }
     }
 
     //katalog.search(req, res)

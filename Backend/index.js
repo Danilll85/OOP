@@ -85,6 +85,7 @@ app.get("/SellerLogInStatus", (req, res) => {
 
 app.get("/Katalog", (req, res) => {
     const products = katalog.getProducts();
+    const usrname = katalog.getToken();
 
     // Сортируем массив products по полю productTitle
     products.sort((a, b) => {
@@ -125,7 +126,24 @@ app.get("/Katalog", (req, res) => {
         return sum / arr.length;
     }
 
-    res.render("Katalog", { products: products });
+    console.log("usrname: ", usrname);
+    console.log(typeof usrname);
+
+    if (usrname != undefined && usrname != "null" && usrname != "undefined") {
+        console.log(usrname);
+        const decodedData = jwt.verify(usrname, secret);
+
+        const { username } = decodedData;
+        res.render("Katalog", {
+            products: products,
+            username: username,
+        });
+    } else {
+        res.render("Katalog", {
+            products: products,
+            username: undefined,
+        });
+    }
 });
 
 //основные страницы товаров
@@ -171,6 +189,9 @@ app.get("/CarsKatalog", async (req, res) => {
 
             return sum / arr.length;
         }
+
+        console.log(products[1].discountByAdminForUsers);
+        console.log(products[3].discountByAdminForUsers);
 
         if (tmp != undefined) {
             const decodedData = jwt.verify(tmp, secret);
@@ -632,7 +653,20 @@ app.get("/sortByRating", async (req, res) => {
 
         products = sortByRating;
 
-        res.render("sortByRating", { products: products });
+        if (tmp != undefined) {
+            const decodedData = jwt.verify(tmp, secret);
+
+            const { username } = decodedData;
+            res.render("sortByRating", {
+                products: products,
+                username: username,
+            });
+        } else {
+            res.render("sortByRating", {
+                products: products,
+                username: undefined,
+            });
+        }
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
