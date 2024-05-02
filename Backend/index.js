@@ -14,6 +14,7 @@ import { Seller } from "./models/Seller.js";
 import katalog from "./Katalog.js";
 import { infoForCheck } from "./authRouter.js";
 import os from "os";
+import { setMaxIdleHTTPParsers } from "http";
 
 const PORT = 3000;
 const __dirname = path.resolve();
@@ -171,7 +172,20 @@ app.get("/CarsKatalog", async (req, res) => {
             return sum / arr.length;
         }
 
-        res.render("CarsKatalog", { products: products });
+        if (tmp != undefined) {
+            const decodedData = jwt.verify(tmp, secret);
+
+            const { username } = decodedData;
+            res.render("CarsKatalog", {
+                products: products,
+                username: username,
+            });
+        } else {
+            res.render("CarsKatalog", {
+                products: products,
+                username: undefined,
+            });
+        }
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
@@ -221,7 +235,20 @@ app.get("/Alcohol", async (req, res) => {
             return sum / arr.length;
         }
 
-        res.render("CarsKatalog", { products: products });
+        if (tmp != undefined) {
+            const decodedData = jwt.verify(tmp, secret);
+
+            const { username } = decodedData;
+            res.render("CarsKatalog", {
+                products: products,
+                username: username,
+            });
+        } else {
+            res.render("CarsKatalog", {
+                products: products,
+                username: undefined,
+            });
+        }
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
@@ -271,7 +298,20 @@ app.get("/Clothes", async (req, res) => {
             return sum / arr.length;
         }
 
-        res.render("Clothes", { products: products });
+        if (tmp != undefined) {
+            const decodedData = jwt.verify(tmp, secret);
+
+            const { username } = decodedData;
+            res.render("CarsKatalog", {
+                products: products,
+                username: username,
+            });
+        } else {
+            res.render("CarsKatalog", {
+                products: products,
+                username: undefined,
+            });
+        }
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
@@ -296,6 +336,9 @@ app.get("/ShopingCart", (req, res) => {
     if (tmp_0) {
         const decodedData = jwt.verify(tmp_0, secret);
         const { loyalityPoints } = decodedData;
+
+        console.log(cart.getlistOfProducts());
+        console.log("Итоговая сумма:", cart.getTotalCount(loyalityPoints));
 
         res.render("ShopingCart", {
             products: cart.getlistOfProducts(),
@@ -393,6 +436,8 @@ app.post("/api/order", async (req, res) => {
     const obj = newUser.getOrderHistory();
 
     await DB.updateUser(newUser.username, newUser.roles, obj);
+
+    cart.clearDiscounts();
 
     res.send("Order placed successfully");
 });
@@ -592,6 +637,15 @@ app.get("/sortByRating", async (req, res) => {
         console.error("Error fetching products:", error);
         res.status(500).send("Internal Server Error");
     }
+});
+
+//Админ
+app.get("/AdminPage", (req, res) => {
+    res.render("AdminPage");
+});
+
+app.get("/AdminTools", (req, res) => {
+    res.render("AdminTools");
 });
 
 const start = async () => {

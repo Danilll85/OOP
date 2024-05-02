@@ -13,7 +13,6 @@ fetch("/auth/ShopingCart", {
         document.getElementById("username").textContent = data.username;
         document.getElementById("userLoyalityPoints").textContent =
             "Баллы лояльности: " + data.loyalityPoints;
-
         console.log("Loyality points " + data.loyalityPoints);
     })
     .catch((error) =>

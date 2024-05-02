@@ -49,6 +49,7 @@ const lout = document.getElementById("log_out_button");
 lout.addEventListener("click", () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("role");
+    sessionStorage.removeItem("roles");
     window.location.reload();
 });
 
@@ -73,3 +74,24 @@ cart.addEventListener("click", async () => {
 
     window.location.href = "/ShopingCart";
 });
+
+//=============================================================================================
+
+//Admin
+
+const aElem = document.getElementById("adminSwitch");
+
+aElem.addEventListener("click", (e) => {
+    e.preventDefault();
+    const roles = sessionStorage.getItem("roles");
+    console.log("djkfnduis");
+    if (roles == "ADMIN") {
+        window.location.href = "/AdminTools";
+    } else if (roles == undefined) {
+        window.location.href = "/AdminPage";
+    } else {
+        alert("гг");
+    }
+});
+
+//==============================================================================================

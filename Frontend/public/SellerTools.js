@@ -46,7 +46,10 @@ addButton.addEventListener("click", (event) => {
             return;
         }
 
-        //formData.append("token", JSON.stringify(token));
+        const token = sessionStorage.getItem("token");
+
+        formData.append("token", JSON.stringify(token));
+        console.log(formData);
         // Отправляем данные на сервер
         fetch("/auth/AdminModeration", {
             method: "POST",
@@ -116,6 +119,67 @@ removeButton.addEventListener("click", (event) => {
                     throw new Error("Ошибка при отправке формы");
                 } else {
                     alert("Товар успешно удален");
+                }
+            })
+            .then((data) => {
+                // Обработка данных
+                console.log(data);
+            })
+            .catch((error) => {
+                // Обработка ошибок
+                console.error("Ошибка:", error);
+            });
+    } else {
+        alert("Вы не являетесь продавцом");
+        return;
+    }
+});
+
+//Добавить скидку
+
+const addDiscountButton = document.getElementById("sendDiscount");
+
+let discountForm = document.getElementById("addDiscountForm");
+
+addDiscountButton.addEventListener("click", (event) => {
+    event.preventDefault(); // Предотвращаем стандартное поведение кнопки
+
+    const roleObj = JSON.parse(sessionStorage.getItem("role"));
+
+    if (roleObj && roleObj.role === "SELLER") {
+        // Создаем новый объект FormData и добавляем данные из формы
+        const formData = new FormData(discountForm);
+
+        const productTitle = formData.get("productTitle");
+        const productDiscount = formData.get("productDiscount");
+        const tokenInfo = sessionStorage.getItem("token");
+
+        const data = {
+            productTitle: productTitle,
+            productDiscount: productDiscount,
+            token: tokenInfo,
+        };
+
+        if (productTitle == "" || productDiscount == "") {
+            alert("Добавьте данные в форму");
+            return;
+        }
+
+        fetch("/auth/addDisountBySeller", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    alert(
+                        "Произошла ошибка (вы пытаетесь взаимодействовать не с вашим товаром"
+                    );
+                    throw new Error("Ошибка при отправке формы");
+                } else {
+                    alert("Скидка успешно добавлена");
                 }
             })
             .then((data) => {

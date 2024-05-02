@@ -255,3 +255,7 @@ flex-grow - определяет сколько пространства зан�
 .change-letter-color {
     color: red;
 }
+
+.toAdminPanel a {
+    display: block;
+}

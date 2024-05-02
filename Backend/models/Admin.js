@@ -11,6 +11,8 @@ import secret from "../config.js";
 export class Admin extends Seller {
     async addProduct(req, res) {
         try {
+            let { token } = req.body;
+
             const errors = validationResult(req);
             console.log(errors);
             if (!errors.isEmpty()) {
@@ -26,6 +28,18 @@ export class Admin extends Seller {
                 //productPhoto,
                 productPrice,
             } = req.body;
+
+            console.log(typeof token);
+
+            token = token.slice(1, token.length - 1);
+            console.log(token);
+            const decodedData = jwt.verify(token, secret);
+
+            const { username } = decodedData;
+
+            const sellerName = username;
+
+            console.log(username);
 
             const bannedWords = [
                 "ПИЗДЕЦ",
@@ -67,10 +81,14 @@ export class Admin extends Seller {
                 productDescription: productDescription,
                 productPhoto: fileData,
                 productPrice: productPrice,
+                productDiscount: "0",
+                sellerName: sellerName,
             });
 
             await product.save();
 
+            //метод для добавления поля
+            await DB.updateDiscount(typeOfProduct, productTitle);
             // Удалите файл с диска после сохранения его в базе данных
             fs.unlinkSync(filePath);
 
@@ -128,6 +146,19 @@ export class Admin extends Seller {
 
     async removeItem(productTitle, typeOfProduct) {
         await DB.removeFromProducts(productTitle, typeOfProduct);
+    }
+
+    async addDiscountOnCategory(typeOfProduct, productDiscount) {
+        await DB.addDiscountByAdminByCategory(typeOfProduct, productDiscount);
+    }
+
+    async addDiscountForUser(userName, productDiscount) {
+        let check = await DB.addDiscountByAdminForUser(
+            userName,
+            productDiscount
+        );
+
+        return check;
     }
 }
 

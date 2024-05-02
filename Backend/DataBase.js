@@ -124,9 +124,11 @@ export class DataBase {
                 nameOfMongoDBCollection = "users";
             } else if (role === "SELLER") {
                 nameOfMongoDBCollection = "sellers";
+            } else if (role === "ADMIN") {
+                nameOfMongoDBCollection = "admins";
             } else {
                 console.log(role);
-                throw new Error("Ошибка в editInfo класс DataBase");
+                throw new Error("Ошибка в findUser класс DataBase");
             }
 
             const collection = database.collection(nameOfMongoDBCollection);
@@ -485,6 +487,193 @@ export class DataBase {
                 productType: typeOfProduct,
                 productTitle: productTitle,
             });
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async addDiscountBySeller(productTitle, productDiscount, username) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = database.collection("products");
+
+            console.log(productDiscount);
+
+            //написать запрос по поиску товара и обновлния в нем скидки
+            const result = await collection.updateOne(
+                { sellerName: username, productTitle: productTitle },
+                { $set: { productDiscount: productDiscount } }
+            );
+
+            if (result.modifiedCount > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async addDiscountByAdminByCategory(typeOfProduct, productDiscount) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = database.collection("products");
+
+            console.log(typeOfProduct, productDiscount);
+
+            //допиши запрос
+            await collection.updateMany(
+                { productType: typeOfProduct },
+                { $set: { discountByAdmin: productDiscount } }
+            );
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async addDiscountByAdminForUser(username, productDiscount) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            //Проверим есть ли такой пользователь вообще
+
+            let check = true;
+
+            let result = await database
+                .collection("users")
+                .findOne({ username: username });
+
+            if (result == undefined) {
+                check = false;
+
+                return check;
+            }
+            //
+
+            let collection = database.collection("products");
+
+            console.log(username, productDiscount);
+
+            const obj = {
+                username: username,
+                discountProcent: productDiscount,
+            };
+
+            const product = await collection.findOne({ productType: "Car" });
+            check = false;
+            console.log(product.discountByAdminForUsers);
+
+            for (let i = 0; i < product.discountByAdminForUsers.length; i++) {
+                console.log(product.discountByAdminForUsers[i].username);
+
+                if (product.discountByAdminForUsers[i].username == username) {
+                    check = true; // т.е отзыв от конкретного пользователя есть
+                }
+            }
+
+            if (!check) {
+                // Если пользователь новый, добавляем новую запись о скидке
+                await collection.updateMany(
+                    {},
+                    { $push: { discountByAdminForUsers: obj } }
+                );
+                return true;
+            } else {
+                // Если пользователь уже существует, заменяем существующую запись о скидке
+                await collection.updateMany(
+                    { "discountByAdminForUsers.username": username },
+                    { $set: { "discountByAdminForUsers.$": obj } }
+                );
+                return true;
+            }
+
+            console.log(product);
+
+            //допиши запрос
+            await collection.updateMany(
+                {},
+                { $push: { discountByAdminForUsers: obj } }
+            );
+        } catch (err) {
+            console.error("Data base connectin error:", err);
+        } finally {
+            if (client) {
+                await client.close();
+                console.log("Connection closed");
+            }
+        }
+    }
+
+    async updateDiscount(typeOfProduct, productTitle) {
+        let client;
+        try {
+            client = new MongoClient(
+                "mongodb://127.0.0.1:27017/Authentification"
+            );
+
+            await client.connect();
+
+            const database = client.db();
+
+            let collection = database.collection("products");
+
+            let someProduct = await collection.findOne({
+                productType: typeOfProduct,
+            });
+
+            let arr = someProduct.discountByAdminForUsers;
+            let arr_1 = someProduct.discountByAdmin;
+
+            await collection.updateOne(
+                { productTitle: productTitle },
+                { $set: { discountByAdmin: arr_1 } }
+            );
+
+            await collection.updateOne(
+                { productTitle: productTitle },
+                { $set: { discountByAdminForUsers: arr } }
+            );
+
+            //await
         } catch (err) {
             console.error("Data base connectin error:", err);
         } finally {

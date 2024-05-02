@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { User } from "./User.js";
+import db from "../DataBase.js";
 //import Role from "./Role.js";
 
 export class Seller extends User {
@@ -8,6 +9,16 @@ export class Seller extends User {
         this.username = username;
         this.password = hashPassword;
         this.roles = ["SELLER"];
+    }
+
+    async addDiscount(productTitle, productDiscount, username) {
+        const result = await db.addDiscountBySeller(
+            productTitle,
+            productDiscount,
+            username
+        );
+
+        return result;
     }
 }
 

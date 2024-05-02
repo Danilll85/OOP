@@ -14,6 +14,7 @@ buyButtons.forEach((button) => {
             return;
         }
 
+        const productType = document.getElementById("typeOfProduct").innerText;
         const productCountInput = button.querySelector(
             'input[name="productCount"]'
         );
@@ -30,23 +31,80 @@ buyButtons.forEach((button) => {
             alert("нельзя добавить 0 штук в корзину");
             return;
         }
+
+        //Скидка по категории (если есть)
+        let discountByShop = document.querySelector("h2").innerText;
+        discountByShop = discountByShop.split(" ")[3];
+        if (discountByShop == "%") discountByShop = undefined;
+        console.log("Скидка на категорию - ", discountByShop);
+
+        //Cкидка от продавца и индивидуальная
+        let discountByAdminForUser = undefined;
+        let discountBySeller = button.parentElement.querySelector(
+            ".product-details p:nth-child(4)"
+        ).innerText;
+        discountBySeller = discountBySeller.split(" ");
+        if (discountBySeller[1] == "индивидуальная") {
+            console.log("мы в if для админа");
+            discountByAdminForUser = discountBySeller[3]; //здесь только индивидуальная скидка
+            discountBySeller = undefined;
+        } else if (
+            button.parentElement
+                .querySelector(".product-details p:nth-child(4)") // Здесь только скидка от продавца
+                .innerText.split(" ")[2] == "продавца" &&
+            button.parentElement
+                .querySelector(".product-details p:nth-child(6)")
+                .innerText.split(" ")[1] == "товара"
+        ) {
+            console.log("мы в if для продавца");
+            discountBySeller = discountBySeller[3];
+        } else if (
+            (discountByAdminForUser =
+                button.parentElement
+                    .querySelector(".product-details p:nth-child(5)")
+                    .innerText.split(" ")[3] == "еще")
+        ) {
+            console.log(
+                "Мы в ifе где нет скидок от продавца и для пользователя"
+            );
+            discountByAdminForUser = undefined;
+            // Здесь нет скидок от продавца и для пользователя
+        } else {
+            console.log("мы в финальном else");
+            discountByAdminForUser = button.parentElement
+                .querySelector(".product-details p:nth-child(5)") // Здесь скидка от продавца и админа
+                .innerText.split(" ")[3];
+        }
+
         // Отправляем данные на сервер
         const data = {
+            productType: productType,
             productName: productName,
             productPrice: productPrice,
             productCount: productCount,
         };
 
-        console.log(data);
+        if (discountByShop != undefined) {
+            data["discountByShop"] = discountByShop;
+        }
+        if (discountBySeller != undefined) {
+            data["discountBySeller"] = discountBySeller[3];
+        }
+        if (discountByAdminForUser != undefined) {
+            data["discountByAdminForUser"] = discountByAdminForUser;
+        }
 
+        console.log("дата", data);
+        console.log("токен", token);
+        const info = sessionStorage.getItem("token");
         // Отправляем запрос POST на сервер с данными о товаре
         fetch("/auth/AddToCart", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // Добавляем токен в заголовок
             },
             body: JSON.stringify(data),
-            token: token,
         })
             .then((response) => {
                 if (!response.ok) {
@@ -201,6 +259,7 @@ function initRatings() {
                 initRatingVars(rating);
                 //Отправка на сервер if да else
 
+                sessionStorage.setItem("ratingValue", ratingItem.value);
                 console.log(
                     "значение которое отправим на сервер",
                     ratingItem.value
@@ -232,12 +291,11 @@ function initRatings() {
 
                 alert("Спасибо за оценку!");
                 ratingValue.innerHTML = index + 1;
+                //location.reload();
                 setRatingActiveWidth();
-
-                location.reload();
             });
         }
     }
 }
 
-//-----------------------------------------------------
+//----------------------------------------------------------------

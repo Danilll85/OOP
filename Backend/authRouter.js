@@ -1,8 +1,9 @@
 import Router from "express";
 import controller from "./authController.js";
 import admin from "./models/Admin.js";
+import { Seller } from "./models/Seller.js";
 import cart from "./models/ShopingCart.js";
-import { check } from "express-validator";
+import { body, check } from "express-validator";
 import order from "./models/Order.js";
 import katalog from "./Katalog.js";
 import multer from "multer";
@@ -41,6 +42,9 @@ router.post(
 );
 
 router.post("/SellerLogIn", controller.sellerLogin);
+
+router.post("/AdminLogIn", controller.adminLogin);
+
 router.get("/users", controller.getUsers);
 //router.get("/users", authMiddleware(["USER"]), controller.getUsers);
 //roleMiddleware(["USER"])
@@ -84,11 +88,19 @@ router.post("/AdminRemove", async (req, res) => {
     res.status(200).send("Товар удален");
 });
 
-router.post(
-    "/ShopingCart",
-    check("token", "нет токена").notEmpty(),
-    cart.showUserName
-);
+router.post("/ShopingCart", (req, res) => {
+    const token = req.body.token;
+
+    const decodedData = jwt.verify(token, secret);
+
+    let maxDiscount = cart.showUserName(decodedData);
+    console.log("Максимальная скидка: ", maxDiscount);
+    res.json({
+        username: decodedData.username,
+        loyalityPoints: decodedData.loyalityPoints,
+        maxDiscount: maxDiscount,
+    });
+});
 
 export let infoForCheck = undefined;
 router.post(
@@ -115,7 +127,36 @@ router.post(
     }
 );
 
-router.post("/AddToCart", cart.addProduct);
+router.post("/AddToCart", (req, res) => {
+    const {
+        productType,
+        productName,
+        productPrice,
+        productCount,
+        discountByShop,
+        discountBySeller,
+        discountByAdminForUser,
+    } = req.body;
+    console.log(discountByShop);
+    const token = req.headers["authorization"].split(" ")[1];
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { loyalityPoints } = decodedData;
+
+    cart.addProduct(
+        productType,
+        productName,
+        productPrice,
+        productCount,
+        discountByShop,
+        discountBySeller,
+        discountByAdminForUser,
+        loyalityPoints
+    );
+
+    res.status(200).send();
+});
 
 router.post("/CreateOrder", order.pay);
 
@@ -137,5 +178,51 @@ router.post(
 //    upload.single("productPhoto"),
 //    admin.editInfo
 //);
+
+router.post("/addDisountBySeller", async (req, res) => {
+    const { productTitle, productDiscount, token } = req.body;
+
+    const decodedData = jwt.verify(token, secret);
+
+    const { username } = decodedData;
+
+    console.log(productTitle, productDiscount, username);
+
+    let seller = new Seller();
+
+    const result = await seller.addDiscount(
+        productTitle,
+        productDiscount,
+        username
+    );
+
+    seller = null;
+
+    if (result) {
+        res.status(200).send("Скидка успешно добавлена");
+    } else {
+        res.status(500).send("Произошла ошибка");
+    }
+});
+
+router.post("/addDiscountByAdmin", async (req, res) => {
+    const { typeOfProduct, productDiscount } = req.body;
+
+    await admin.addDiscountOnCategory(typeOfProduct, productDiscount);
+
+    res.status(200).send("Скидка на категорию добавлена успешно");
+});
+
+router.post("/addDiscountByAdminForUser", async (req, res) => {
+    const { username, productDiscount } = req.body;
+
+    let check = await admin.addDiscountForUser(username, productDiscount);
+
+    if (check) {
+        res.status(200).send();
+    } else {
+        res.status(500).send("Ошибка, такого пользователя нет");
+    }
+});
 
 export default router;

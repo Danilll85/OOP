@@ -151,6 +151,38 @@ export class authController {
         }
     }
 
+    async adminLogin(req, res) {
+        try {
+            const { username, password } = req.body;
+            const admin = await DB.findUser(username, "ADMIN");
+            if (!admin) {
+                return res
+                    .status(400)
+                    .json({ message: "Пользователь не найден" });
+            }
+
+            const validPassword = bcrypt.compareSync(password, admin.password);
+
+            console.log(admin);
+            console.log(typeof validPassword);
+
+            if (!validPassword) {
+                res.status(400).json({ message: "Введён не верный пароль" });
+            }
+            const token = generateAccesToken(
+                admin._id,
+                admin.username,
+                admin.roles
+            );
+
+            const roles = "ADMIN";
+            return res.json({ token, roles });
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ message: "Login error" });
+        }
+    }
+
     async getUsers(req, res) {
         try {
             const users = await User.find();
