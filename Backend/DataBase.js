@@ -583,9 +583,15 @@ export class DataBase {
                 .findOne({ username: username });
 
             if (result == undefined) {
-                check = false;
+                result = await database
+                    .collection("sellers")
+                    .findOne({ username: username });
 
-                return check;
+                if (result == undefined) {
+                    check = false;
+
+                    return check;
+                }
             }
             //
 
